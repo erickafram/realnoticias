@@ -439,12 +439,17 @@
           <i class="bi bi-people"></i>
           <span>Usuários</span>
         </a>
+      <% } %>
 
+      <% if (user && (user.role === 'admin' || user.role === 'gestor' || user.role === 'editor')) { %>
+        <% if (user.role === 'editor') { %>
+          <div class="menu-label">Sistema</div>
+        <% } %>
         <a href="/admin/settings" class="nav-item <%= currentPath.startsWith('/admin/settings') ? 'active' : '' %>">
           <i class="bi bi-gear"></i>
           <span>Configurações</span>
         </a>
-        <% } %>
+      <% } %>
 
       <% if (user && user.role === 'admin') { %>
         <a href="/admin/modules" class="nav-item <%= currentPath.startsWith('/admin/modules') ? 'active' : '' %>">
