@@ -76,11 +76,17 @@ class SettingController {
           );
         } else {
           // Criar nova (para cores e outras configurações dinâmicas)
-          const group = key.startsWith('color_') ? 'colors' : 'general';
+          let group = 'general';
+          if (key.startsWith('color_')) {
+            group = 'colors';
+          } else if (key === 'header_style' || key === 'logo_size') {
+            group = 'layout';
+          }
+          
           await Setting.create({
             key,
             value: finalValue,
-            type: 'text', // Usar 'text' pois 'color' não existe no ENUM
+            type: 'text',
             group,
             label: key
           });
