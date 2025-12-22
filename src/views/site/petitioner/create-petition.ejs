@@ -1,4 +1,4 @@
-<%- include('../layouts/minimal', { body: `
+<%- include('../layouts/minimal-header') %>
 
 <div class="create-petition-page">
   <div class="container">
@@ -16,7 +16,7 @@
       <div class="step-line"></div>
       <div class="step" data-step="3">
         <div class="step-number">3</div>
-        <span>${petitioner ? 'Revisar' : 'Seus Dados'}</span>
+        <span><%= typeof petitioner !== 'undefined' && petitioner ? 'Revisar' : 'Seus Dados' %></span>
       </div>
     </div>
 
@@ -147,65 +147,65 @@
       <!-- Step 3: Dados do Usuário ou Revisão -->
       <div class="wizard-step" data-step="3">
         <div class="step-card">
-          ${petitioner ? 
-            '<div class="step-header">' +
-              '<i class="bi bi-check-circle"></i>' +
-              '<h1>Revise sua petição</h1>' +
-              '<p>Confira os dados antes de enviar</p>' +
-            '</div>' +
-            '<div class="review-section">' +
-              '<div class="review-user">' +
-                '<div class="user-avatar">' + petitioner.name.charAt(0).toUpperCase() + '</div>' +
-                '<div>' +
-                  '<strong>' + petitioner.name + '</strong>' +
-                  '<span>' + petitioner.email + '</span>' +
-                '</div>' +
-              '</div>' +
-              '<div class="review-item">' +
-                '<label>Título</label>' +
-                '<p id="reviewTitle">-</p>' +
-              '</div>' +
-              '<div class="review-item">' +
-                '<label>Descrição</label>' +
-                '<p id="reviewDesc">-</p>' +
-              '</div>' +
-              '<div class="review-item">' +
-                '<label>Categoria</label>' +
-                '<p id="reviewCategory">-</p>' +
-              '</div>' +
-              '<div class="review-item">' +
-                '<label>Meta</label>' +
-                '<p id="reviewGoal">-</p>' +
-              '</div>' +
-            '</div>'
-          :
-            '<div class="step-header">' +
-              '<i class="bi bi-person-plus"></i>' +
-              '<h1>Crie sua conta</h1>' +
-              '<p>Para acompanhar o andamento da sua petição</p>' +
-            '</div>' +
-            '<div class="form-group">' +
-              '<label>Nome Completo *</label>' +
-              '<input type="text" name="name" id="name" required placeholder="Seu nome completo">' +
-            '</div>' +
-            '<div class="form-group">' +
-              '<label>Email *</label>' +
-              '<input type="email" name="email" id="email" required placeholder="seu@email.com">' +
-              '<small>Você receberá atualizações sobre sua petição</small>' +
-            '</div>' +
-            '<div class="form-group">' +
-              '<label>Telefone *</label>' +
-              '<input type="tel" name="phone" id="phone" required placeholder="(00) 00000-0000">' +
-            '</div>' +
-            '<div class="form-group">' +
-              '<label>Senha *</label>' +
-              '<input type="password" name="password" id="password" required minlength="6" placeholder="Mínimo 6 caracteres">' +
-              '<small>Crie uma senha para acessar sua conta</small>' +
-            '</div>' +
-            '<div class="login-hint">' +
-              '<p>Já tem uma conta? <a href="/login">Faça login</a></p>' +
-            '</div>'
-          }
+          <% if (typeof petitioner !== 'undefined' && petitioner) { %>
+            <div class="step-header">
+              <i class="bi bi-check-circle"></i>
+              <h1>Revise sua petição</h1>
+              <p>Confira os dados antes de enviar</p>
+            </div>
+            <div class="review-section">
+              <div class="review-user">
+                <div class="user-avatar"><%= petitioner.name.charAt(0).toUpperCase() %></div>
+                <div>
+                  <strong><%= petitioner.name %></strong>
+                  <span><%= petitioner.email %></span>
+                </div>
+              </div>
+              <div class="review-item">
+                <label>Título</label>
+                <p id="reviewTitle">-</p>
+              </div>
+              <div class="review-item">
+                <label>Descrição</label>
+                <p id="reviewDesc">-</p>
+              </div>
+              <div class="review-item">
+                <label>Categoria</label>
+                <p id="reviewCategory">-</p>
+              </div>
+              <div class="review-item">
+                <label>Meta</label>
+                <p id="reviewGoal">-</p>
+              </div>
+            </div>
+          <% } else { %>
+            <div class="step-header">
+              <i class="bi bi-person-plus"></i>
+              <h1>Crie sua conta</h1>
+              <p>Para acompanhar o andamento da sua petição</p>
+            </div>
+            <div class="form-group">
+              <label>Nome Completo *</label>
+              <input type="text" name="name" id="name" required placeholder="Seu nome completo">
+            </div>
+            <div class="form-group">
+              <label>Email *</label>
+              <input type="email" name="email" id="email" required placeholder="seu@email.com">
+              <small>Você receberá atualizações sobre sua petição</small>
+            </div>
+            <div class="form-group">
+              <label>Telefone *</label>
+              <input type="tel" name="phone" id="phone" required placeholder="(00) 00000-0000">
+            </div>
+            <div class="form-group">
+              <label>Senha *</label>
+              <input type="password" name="password" id="password" required minlength="6" placeholder="Mínimo 6 caracteres">
+              <small>Crie uma senha para acessar sua conta</small>
+            </div>
+            <div class="login-hint">
+              <p>Já tem uma conta? <a href="/login">Faça login</a></p>
+            </div>
+          <% } %>
 
           <div class="terms-check">
             <label class="checkbox-label">
@@ -673,14 +673,11 @@
   let currentStep = 1;
 
   function nextStep(step) {
-    // Validar step atual
     if (!validateStep(currentStep)) return;
 
-    // Atualizar UI
     document.querySelector('.wizard-step[data-step="' + currentStep + '"]').classList.remove('active');
     document.querySelector('.wizard-step[data-step="' + step + '"]').classList.add('active');
     
-    // Atualizar progress
     document.querySelector('.wizard-progress .step[data-step="' + currentStep + '"]').classList.remove('active');
     document.querySelector('.wizard-progress .step[data-step="' + currentStep + '"]').classList.add('completed');
     document.querySelector('.wizard-progress .step[data-step="' + step + '"]').classList.add('active');
@@ -691,7 +688,6 @@
 
     currentStep = step;
 
-    // Se for step 3 e usuário logado, atualizar review
     if (step === 3) {
       updateReview();
     }
@@ -752,12 +748,10 @@
     }
   }
 
-  // Character counter
   document.getElementById('description').addEventListener('input', function() {
     document.getElementById('descCount').textContent = this.value.length;
   });
 
-  // Image preview
   document.getElementById('imageInput').addEventListener('change', function(e) {
     if (this.files && this.files[0]) {
       const reader = new FileReader();
@@ -776,7 +770,6 @@
     document.getElementById('imagePreview').style.display = 'none';
   }
 
-  // Form submit
   document.getElementById('petitionForm').addEventListener('submit', function(e) {
     const btn = document.getElementById('submitBtn');
     btn.disabled = true;
@@ -784,4 +777,4 @@
   });
 </script>
 
-`}) %>
+<%- include('../layouts/minimal-footer') %>
