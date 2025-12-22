@@ -9,7 +9,15 @@ class UserController {
   // Listar todos os usuários (admin)
   async index(req, res) {
     try {
+      const currentUserRole = req.session.user.role;
+      
+      // Se não for admin, não mostra usuários admin
+      const whereClause = currentUserRole !== 'admin' 
+        ? { role: { [Op.ne]: 'admin' } } 
+        : {};
+
       const users = await User.findAll({
+        where: whereClause,
         attributes: { exclude: ['password_hash'] },
         order: [['name', 'ASC']]
       });
@@ -30,7 +38,8 @@ class UserController {
     res.render('admin/users/form', {
       title: 'Novo Usuário',
       userData: null,
-      isEdit: false
+      isEdit: false,
+      currentUserRole: req.session.user.role
     });
   }
 
@@ -38,6 +47,13 @@ class UserController {
   async store(req, res) {
     try {
       const { name, email, password, role, bio, active } = req.body;
+
+      // Gestor e editor não podem criar admin
+      const currentUserRole = req.session.user.role;
+      let finalRole = role || 'editor';
+      if (currentUserRole !== 'admin' && finalRole === 'admin') {
+        finalRole = 'editor'; // Força editor se tentar criar admin
+      }
 
       // Verificar se email já existe
       const existingUser = await User.findOne({ where: { email } });
@@ -56,7 +72,7 @@ class UserController {
         name,
         email,
         password_hash: password,
-        role: role || 'editor',
+        role: finalRole,
         bio,
         active: active === 'on' || active === true,
         avatar: req.processedFile ? req.processedFile.url : null
@@ -83,10 +99,18 @@ class UserController {
         return res.redirect('/admin/users');
       }
 
+      // Gestor e editor não podem editar admin
+      const currentUserRole = req.session.user.role;
+      if (currentUserRole !== 'admin' && userData.role === 'admin') {
+        req.flash('error', 'Você não tem permissão para editar este usuário.');
+        return res.redirect('/admin/users');
+      }
+
       res.render('admin/users/form', {
         title: 'Editar Usuário',
         userData,
-        isEdit: true
+        isEdit: true,
+        currentUserRole: req.session.user.role
       });
     } catch (error) {
       console.error('Erro ao carregar usuário:', error);
@@ -105,7 +129,20 @@ class UserController {
         return res.redirect('/admin/users');
       }
 
+      // Gestor e editor não podem editar admin
+      const currentUserRole = req.session.user.role;
+      if (currentUserRole !== 'admin' && user.role === 'admin') {
+        req.flash('error', 'Você não tem permissão para editar este usuário.');
+        return res.redirect('/admin/users');
+      }
+
       const { name, email, password, role, bio, active } = req.body;
+
+      // Gestor e editor não podem promover para admin
+      let finalRole = role || 'editor';
+      if (currentUserRole !== 'admin' && finalRole === 'admin') {
+        finalRole = user.role; // Mantém o role atual
+      }
 
       // Verificar se email já existe (se alterado)
       if (email !== user.email) {
@@ -121,7 +158,7 @@ class UserController {
       // Atualizar campos
       user.name = name;
       user.email = email;
-      user.role = role || 'editor';
+      user.role = finalRole;
       user.bio = bio;
       user.active = active === 'on' || active === true;
 
@@ -159,6 +196,13 @@ class UserController {
       // Não permitir excluir o próprio usuário
       if (user.id === req.session.user.id) {
         req.flash('error', 'Você não pode excluir sua própria conta.');
+        return res.redirect('/admin/users');
+      }
+
+      // Gestor e editor não podem excluir admin
+      const currentUserRole = req.session.user.role;
+      if (currentUserRole !== 'admin' && user.role === 'admin') {
+        req.flash('error', 'Você não tem permissão para excluir este usuário.');
         return res.redirect('/admin/users');
       }
 

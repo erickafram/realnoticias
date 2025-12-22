@@ -432,7 +432,7 @@
       </a>
       <% } %>
 
-      <% if (user && user.role==='admin' ) { %>
+      <% if (user && (user.role === 'admin' || user.role === 'gestor')) { %>
         <div class="menu-label">Sistema</div>
 
         <a href="/admin/users" class="nav-item <%= currentPath.startsWith('/admin/users') ? 'active' : '' %>">
@@ -445,6 +445,18 @@
           <span>Configurações</span>
         </a>
         <% } %>
+
+      <% if (user && user.role === 'admin') { %>
+        <a href="/admin/modules" class="nav-item <%= currentPath.startsWith('/admin/modules') ? 'active' : '' %>">
+          <i class="bi bi-puzzle"></i>
+          <span>Módulos</span>
+        </a>
+
+        <a href="/admin/api" class="nav-item <%= currentPath.startsWith('/admin/api') ? 'active' : '' %>">
+          <i class="bi bi-plug"></i>
+          <span>API</span>
+        </a>
+      <% } %>
     </nav>
 
     <div class="sidebar-footer">
@@ -457,7 +469,7 @@
             <%= user ? user.name : 'Usuário' %>
           </div>
           <div class="user-role">
-            <%= user && user.role==='admin' ? 'Admin' : 'Editor' %>
+            <%= user && user.role==='admin' ? 'Admin' : (user && user.role==='gestor' ? 'Gestor' : 'Editor') %>
           </div>
         </div>
       </a>

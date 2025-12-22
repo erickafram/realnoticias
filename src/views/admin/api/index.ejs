@@ -1,0 +1,281 @@
+<%- include('../layouts/main', { body: `
+<div class="page-header">
+  <div>
+    <h1>Configurações de API</h1>
+    <p>Gerencie as integrações com APIs externas</p>
+  </div>
+</div>
+
+<form action="/admin/api" method="POST">
+  <div class="settings-layout">
+    <div class="settings-main">
+      <!-- Assistente de IA -->
+      <div class="settings-card ai-card">
+        <div class="card-header">
+          <i class="bi bi-robot"></i>
+          <span>Assistente de Inteligência Artificial</span>
+          <span class="ai-badge">Beta</span>
+        </div>
+        <div class="card-body">
+          <p class="ai-description">Configure a integração com a API Together AI para usar recursos de IA na criação de conteúdo.</p>
+          
+          <div class="form-group">
+            <label>Chave da API Together AI</label>
+            <input type="password" name="ai_api_key" value="${aiSettings.ai_api_key || ''}" placeholder="Sua chave da API">
+            <small>Obtenha sua chave em: <a href="https://api.together.xyz" target="_blank">https://api.together.xyz</a></small>
+          </div>
+          
+          <div class="form-group">
+            <label>URL da API Together AI</label>
+            <input type="text" name="ai_api_url" value="${aiSettings.ai_api_url || 'https://api.together.xyz/v1/chat/completions'}">
+          </div>
+          
+          <div class="form-group">
+            <label>Status do Assistente</label>
+            <div class="toggle-group">
+              <label class="toggle-option ${aiSettings.ai_enabled === 'true' ? 'active' : ''}">
+                <input type="radio" name="ai_enabled" value="true" ${aiSettings.ai_enabled === 'true' ? 'checked' : ''}>
+                <i class="bi bi-check-circle"></i> Ativado
+              </label>
+              <label class="toggle-option ${aiSettings.ai_enabled !== 'true' ? 'active' : ''}">
+                <input type="radio" name="ai_enabled" value="false" ${aiSettings.ai_enabled !== 'true' ? 'checked' : ''}>
+                <i class="bi bi-x-circle"></i> Desativado
+              </label>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label>Modelo de IA</label>
+            <select name="ai_model">
+              <option value="meta-llama/Llama-3-70b-chat-hf" ${aiSettings.ai_model === 'meta-llama/Llama-3-70b-chat-hf' ? 'selected' : ''}>Llama 3 70B (Recomendado)</option>
+              <option value="meta-llama/Llama-3-8b-chat-hf" ${aiSettings.ai_model === 'meta-llama/Llama-3-8b-chat-hf' ? 'selected' : ''}>Llama 3 8B (Mais rápido)</option>
+              <option value="mistralai/Mixtral-8x7B-Instruct-v0.1" ${aiSettings.ai_model === 'mistralai/Mixtral-8x7B-Instruct-v0.1' ? 'selected' : ''}>Mixtral 8x7B</option>
+              <option value="Qwen/Qwen2-72B-Instruct" ${aiSettings.ai_model === 'Qwen/Qwen2-72B-Instruct' ? 'selected' : ''}>Qwen2 72B</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      
+      <button type="submit" class="btn-save">
+        <i class="bi bi-check-lg"></i>
+        Salvar Configurações
+      </button>
+    </div>
+    
+    <div class="settings-sidebar">
+      <div class="settings-card">
+        <div class="card-header">
+          <i class="bi bi-info-circle"></i>
+          <span>Informações</span>
+        </div>
+        <div class="card-body">
+          <p class="info-text">
+            As configurações de API são restritas apenas para administradores do sistema.
+          </p>
+          <p class="info-text">
+            <strong>Together AI</strong> é utilizada para gerar conteúdo automaticamente, melhorar títulos e subtítulos de posts.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<style>
+.page-header {
+  margin-bottom: 24px;
+}
+.page-header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 4px;
+}
+.page-header p {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+}
+
+.settings-layout {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 24px;
+  align-items: start;
+}
+
+.settings-card {
+  background: #fff;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.card-header i {
+  color: #3b82f6;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+.ai-badge {
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 20px;
+  margin-left: auto;
+}
+
+.ai-description {
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+.form-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 13px;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+.form-group small {
+  display: block;
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+
+.form-group small a {
+  color: #3b82f6;
+}
+
+.toggle-group {
+  display: flex;
+  gap: 8px;
+}
+
+.toggle-option {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.toggle-option input {
+  display: none;
+}
+
+.toggle-option.active {
+  background: #eff6ff;
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+.toggle-option:hover:not(.active) {
+  border-color: #cbd5e1;
+}
+
+.btn-save {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-save:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.info-text {
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.info-text:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 991px) {
+  .settings-layout {
+    grid-template-columns: 1fr;
+  }
+  
+  .settings-sidebar {
+    order: -1;
+  }
+}
+</style>
+
+<script>
+document.querySelectorAll('.toggle-option').forEach(option => {
+  option.addEventListener('click', function() {
+    const group = this.closest('.toggle-group');
+    group.querySelectorAll('.toggle-option').forEach(opt => opt.classList.remove('active'));
+    this.classList.add('active');
+    this.querySelector('input').checked = true;
+  });
+});
+</script>
+` }) %>

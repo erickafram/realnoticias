@@ -32,7 +32,8 @@
               <label class="form-label">Função</label>
               <select name="role" class="form-select">
                 <option value="editor"${userData && userData.role === 'editor' ? ' selected' : ''}>Editor</option>
-                <option value="admin"${userData && userData.role === 'admin' ? ' selected' : ''}>Administrador</option>
+                <option value="gestor"${userData && userData.role === 'gestor' ? ' selected' : ''}>Gestor</option>
+                ${currentUserRole === 'admin' ? '<option value="admin"' + (userData && userData.role === 'admin' ? ' selected' : '') + '>Administrador</option>' : ''}
               </select>
             </div>
           </div>
@@ -75,7 +76,16 @@
           <li>Acesso total ao sistema</li>
           <li>Gerenciar usuários</li>
           <li>Configurações do site</li>
+          <li>Configurações de API</li>
+          <li>Todas as permissões de Gestor</li>
+        </ul>
+        
+        <h6 class="text-success"><i class="bi bi-person-gear me-1"></i>Gestor</h6>
+        <ul class="small text-muted mb-3">
+          <li>Gerenciar usuários</li>
+          <li>Configurações do site</li>
           <li>Todas as permissões de Editor</li>
+          <li><span class="text-danger">Sem acesso às APIs</span></li>
         </ul>
         
         <h6 class="text-primary"><i class="bi bi-pencil me-1"></i>Editor</h6>

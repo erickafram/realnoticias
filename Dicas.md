@@ -18,3 +18,10 @@ git pull origin main
 npx sequelize-cli db:migrate
 npx sequelize-cli db:seed:all
 pm2 restart participato
+
+#Servidor de Produção Real Noticias
+cd /home/realnoticias/htdocs/realnoticias.com.br
+git pull origin main
+npx sequelize-cli db:migrate
+npx sequelize-cli db:seed:all
+pm2 restart realnoticias

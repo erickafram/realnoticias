@@ -26,8 +26,8 @@
               '<span class="item-meta">' + u.email + '</span>' +
             '</div>' +
             '<div class="item-badges">' +
-              '<span class="badge ' + (u.role === 'admin' ? 'danger' : 'primary') + '">' + 
-                (u.role === 'admin' ? 'Admin' : 'Editor') + 
+              '<span class="badge ' + (u.role === 'admin' ? 'danger' : (u.role === 'gestor' ? 'success' : 'primary')) + '">' + 
+                (u.role === 'admin' ? 'Admin' : (u.role === 'gestor' ? 'Gestor' : 'Editor')) + 
               '</span>' +
               (u.active 
                 ? '<span class="badge success">Ativo</span>'

@@ -31,6 +31,19 @@ const isAdmin = (req, res, next) => {
   return res.redirect('/admin');
 };
 
+// Verificar se o usuário é administrador ou gestor
+const isAdminOrGestor = (req, res, next) => {
+  if (req.session && req.session.user) {
+    const role = req.session.user.role;
+    if (role === 'admin' || role === 'gestor') {
+      return next();
+    }
+  }
+  
+  req.flash('error', 'Você não tem permissão para acessar esta página.');
+  return res.redirect('/admin');
+};
+
 // Verificar se o usuário é editor ou admin
 const isEditorOrAdmin = (req, res, next) => {
   if (req.session && req.session.user) {
@@ -64,6 +77,7 @@ module.exports = {
   isAuthenticated,
   isNotAuthenticated,
   isAdmin,
+  isAdminOrGestor,
   isEditorOrAdmin,
   addUserToLocals,
   addFlashMessages

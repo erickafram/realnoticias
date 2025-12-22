@@ -1,0 +1,435 @@
+<%- include('../layouts/main', { body: `
+<div class="page-header">
+  <div>
+    <h1>Módulos</h1>
+    <p>Ative ou desative módulos do sistema</p>
+  </div>
+</div>
+
+<form action="/admin/modules" method="POST">
+  <div class="modules-layout">
+    <div class="modules-main">
+      <!-- Módulo de Petições -->
+      <div class="module-card ${modules.module_petitions ? 'active' : ''}">
+        <div class="module-header">
+          <div class="module-icon petitions">
+            <i class="bi bi-megaphone"></i>
+          </div>
+          <div class="module-info">
+            <h3>Petições</h3>
+            <p>Sistema de petições públicas para cidadãos</p>
+          </div>
+          <div class="module-toggle">
+            <label class="switch">
+              <input type="checkbox" name="module_petitions" value="true" ${modules.module_petitions ? 'checked' : ''} onchange="toggleModuleCard(this)">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+        <div class="module-body">
+          <div class="module-features">
+            <h4>Funcionalidades incluídas:</h4>
+            <ul>
+              <li><i class="bi bi-check-circle"></i> Criação de petições por cidadãos</li>
+              <li><i class="bi bi-check-circle"></i> Sistema de assinaturas</li>
+              <li><i class="bi bi-check-circle"></i> Painel do cidadão</li>
+              <li><i class="bi bi-check-circle"></i> Aprovação de petições pelo admin</li>
+              <li><i class="bi bi-check-circle"></i> Exportação de assinaturas</li>
+            </ul>
+          </div>
+          <div class="module-status">
+            <span class="status-badge ${modules.module_petitions ? 'active' : 'inactive'}">
+              <i class="bi bi-${modules.module_petitions ? 'check-circle-fill' : 'x-circle-fill'}"></i>
+              ${modules.module_petitions ? 'Ativo' : 'Inativo'}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Placeholder para futuros módulos -->
+      <div class="module-card coming-soon">
+        <div class="module-header">
+          <div class="module-icon newsletter">
+            <i class="bi bi-envelope-paper"></i>
+          </div>
+          <div class="module-info">
+            <h3>Newsletter</h3>
+            <p>Sistema de newsletter e email marketing</p>
+          </div>
+          <div class="module-toggle">
+            <span class="coming-badge">Em breve</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="module-card coming-soon">
+        <div class="module-header">
+          <div class="module-icon comments">
+            <i class="bi bi-chat-dots"></i>
+          </div>
+          <div class="module-info">
+            <h3>Comentários</h3>
+            <p>Sistema de comentários nas notícias</p>
+          </div>
+          <div class="module-toggle">
+            <span class="coming-badge">Em breve</span>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-save">
+        <i class="bi bi-check-lg"></i>
+        Salvar Alterações
+      </button>
+    </div>
+
+    <div class="modules-sidebar">
+      <div class="info-card">
+        <div class="info-header">
+          <i class="bi bi-info-circle"></i>
+          <span>Sobre os Módulos</span>
+        </div>
+        <div class="info-body">
+          <p>Os módulos permitem expandir as funcionalidades do seu portal de forma modular.</p>
+          <p>Ao desativar um módulo, todas as suas funcionalidades ficam indisponíveis, mas os dados são preservados.</p>
+        </div>
+      </div>
+
+      <div class="info-card warning">
+        <div class="info-header">
+          <i class="bi bi-exclamation-triangle"></i>
+          <span>Atenção</span>
+        </div>
+        <div class="info-body">
+          <p>Apenas administradores podem gerenciar módulos do sistema.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<style>
+.page-header {
+  margin-bottom: 24px;
+}
+.page-header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 4px;
+}
+.page-header p {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+}
+
+.modules-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 24px;
+  align-items: start;
+}
+
+.module-card {
+  background: #fff;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  border: 2px solid #e2e8f0;
+  transition: all 0.3s;
+}
+
+.module-card.active {
+  border-color: #10b981;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+}
+
+.module-card.coming-soon {
+  opacity: 0.6;
+}
+
+.module-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.module-card.active .module-header {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border-bottom-color: #bbf7d0;
+}
+
+.module-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #fff;
+}
+
+.module-icon.petitions {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.module-icon.newsletter {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.module-icon.comments {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+}
+
+.module-info {
+  flex: 1;
+}
+
+.module-info h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0 0 4px;
+}
+
+.module-info p {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+}
+
+.module-toggle {
+  flex-shrink: 0;
+}
+
+/* Switch Toggle */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 56px;
+  height: 30px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #cbd5e1;
+  transition: 0.3s;
+  border-radius: 30px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 24px;
+  width: 24px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+input:checked + .slider {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+.coming-badge {
+  background: #f1f5f9;
+  color: #64748b;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.module-body {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.module-features h4 {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  margin: 0 0 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.module-features ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.module-features li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #475569;
+  margin-bottom: 8px;
+}
+
+.module-features li i {
+  color: #10b981;
+  font-size: 14px;
+}
+
+.module-status {
+  flex-shrink: 0;
+}
+
+.status-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-badge.active {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.status-badge.inactive {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.btn-save {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 8px;
+}
+
+.btn-save:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+/* Sidebar */
+.info-card {
+  background: #fff;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.info-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.info-header i {
+  color: #3b82f6;
+}
+
+.info-card.warning .info-header {
+  background: #fef3c7;
+  border-bottom-color: #fde68a;
+}
+
+.info-card.warning .info-header i {
+  color: #d97706;
+}
+
+.info-body {
+  padding: 16px;
+}
+
+.info-body p {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0 0 10px;
+  line-height: 1.5;
+}
+
+.info-body p:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 991px) {
+  .modules-layout {
+    grid-template-columns: 1fr;
+  }
+  
+  .modules-sidebar {
+    order: -1;
+  }
+  
+  .module-body {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+</style>
+
+<script>
+function toggleModuleCard(checkbox) {
+  const card = checkbox.closest('.module-card');
+  const statusBadge = card.querySelector('.status-badge');
+  
+  if (checkbox.checked) {
+    card.classList.add('active');
+    if (statusBadge) {
+      statusBadge.classList.remove('inactive');
+      statusBadge.classList.add('active');
+      statusBadge.innerHTML = '<i class="bi bi-check-circle-fill"></i> Ativo';
+    }
+  } else {
+    card.classList.remove('active');
+    if (statusBadge) {
+      statusBadge.classList.remove('active');
+      statusBadge.classList.add('inactive');
+      statusBadge.innerHTML = '<i class="bi bi-x-circle-fill"></i> Inativo';
+    }
+  }
+}
+</script>
+` }) %>

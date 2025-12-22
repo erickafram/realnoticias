@@ -462,53 +462,6 @@
         </div>
       </div>
       
-      <!-- Assistente de IA -->
-      <div class="settings-card ai-card">
-        <div class="card-header">
-          <i class="bi bi-robot"></i>
-          <span>Assistente de Inteligência Artificial</span>
-          <span class="ai-badge">Beta</span>
-        </div>
-        <div class="card-body">
-          <p class="ai-description">Configure a integração com a API Together AI para usar recursos de IA na criação de conteúdo.</p>
-          
-          <div class="form-group">
-            <label>Chave da API Together AI</label>
-            <input type="password" name="ai_api_key" value="${groupedSettings.ai?.find(s => s.key === 'ai_api_key')?.value || ''}" placeholder="Sua chave da API">
-            <small>Obtenha sua chave em: <a href="https://api.together.xyz" target="_blank">https://api.together.xyz</a></small>
-          </div>
-          
-          <div class="form-group">
-            <label>URL da API Together AI</label>
-            <input type="text" name="ai_api_url" value="${groupedSettings.ai?.find(s => s.key === 'ai_api_url')?.value || 'https://api.together.xyz/v1/chat/completions'}">
-          </div>
-          
-          <div class="form-group">
-            <label>Status do Assistente</label>
-            <div class="toggle-group">
-              <label class="toggle-option ${groupedSettings.ai?.find(s => s.key === 'ai_enabled')?.value === 'true' ? 'active' : ''}">
-                <input type="radio" name="ai_enabled" value="true" ${groupedSettings.ai?.find(s => s.key === 'ai_enabled')?.value === 'true' ? 'checked' : ''}>
-                <i class="bi bi-check-circle"></i> Ativado
-              </label>
-              <label class="toggle-option ${groupedSettings.ai?.find(s => s.key === 'ai_enabled')?.value !== 'true' ? 'active' : ''}">
-                <input type="radio" name="ai_enabled" value="false" ${groupedSettings.ai?.find(s => s.key === 'ai_enabled')?.value !== 'true' ? 'checked' : ''}>
-                <i class="bi bi-x-circle"></i> Desativado
-              </label>
-            </div>
-          </div>
-          
-          <div class="form-group">
-            <label>Modelo de IA</label>
-            <select name="ai_model">
-              <option value="meta-llama/Llama-3-70b-chat-hf" ${groupedSettings.ai?.find(s => s.key === 'ai_model')?.value === 'meta-llama/Llama-3-70b-chat-hf' ? 'selected' : ''}>Llama 3 70B (Recomendado)</option>
-              <option value="meta-llama/Llama-3-8b-chat-hf" ${groupedSettings.ai?.find(s => s.key === 'ai_model')?.value === 'meta-llama/Llama-3-8b-chat-hf' ? 'selected' : ''}>Llama 3 8B (Mais rápido)</option>
-              <option value="mistralai/Mixtral-8x7B-Instruct-v0.1" ${groupedSettings.ai?.find(s => s.key === 'ai_model')?.value === 'mistralai/Mixtral-8x7B-Instruct-v0.1' ? 'selected' : ''}>Mixtral 8x7B</option>
-              <option value="Qwen/Qwen2-72B-Instruct" ${groupedSettings.ai?.find(s => s.key === 'ai_model')?.value === 'Qwen/Qwen2-72B-Instruct' ? 'selected' : ''}>Qwen2 72B</option>
-            </select>
-          </div>
-        </div>
-      </div>
-      
       <button type="submit" class="btn-save">
         <i class="bi bi-check-lg"></i>
         Salvar Configurações
@@ -547,7 +500,9 @@
         <div class="card-body">
           <div class="quick-links">
             <a href="/" target="_blank"><i class="bi bi-eye"></i> Ver Site</a>
-            <a href="/sitemap.xml" target="_blank"><i class="bi bi-diagram-3"></i> Sitemap</a>
+            <a href="/sitemap.xml" target="_blank"><i class="bi bi-diagram-3"></i> Sitemap Index</a>
+            <a href="/sitemap-main.xml" target="_blank"><i class="bi bi-diagram-2"></i> Sitemap Principal</a>
+            <a href="/sitemap-news.xml" target="_blank"><i class="bi bi-newspaper"></i> Sitemap News</a>
             <a href="/robots.txt" target="_blank"><i class="bi bi-robot"></i> Robots.txt</a>
           </div>
         </div>
@@ -794,6 +749,113 @@
 .colors-card {
   border: 1px solid #e0f2fe;
   background: linear-gradient(135deg, #fafeff 0%, #f0f9ff 100%);
+}
+
+/* Estilos dos Módulos */
+.modules-card {
+  border: 1px solid #d1fae5;
+  background: linear-gradient(135deg, #fafffc 0%, #f0fdf4 100%);
+}
+.modules-card .card-header {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #fff;
+  border-bottom: none;
+}
+.modules-card .card-header i {
+  color: #fff;
+}
+.modules-description {
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 20px;
+  padding: 12px;
+  background: #fff;
+  border-radius: 8px;
+  border-left: 3px solid #10b981;
+}
+.module-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 12px;
+}
+.module-item:last-child {
+  margin-bottom: 0;
+}
+.module-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.module-icon {
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 20px;
+}
+.module-details h5 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0 0 4px;
+}
+.module-details p {
+  font-size: 12px;
+  color: #64748b;
+  margin: 0;
+}
+.module-toggle {
+  flex-shrink: 0;
+}
+/* Switch Toggle */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 28px;
+}
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #cbd5e1;
+  transition: 0.3s;
+  border-radius: 28px;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 22px;
+  width: 22px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+input:checked + .slider {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+input:checked + .slider:before {
+  transform: translateX(22px);
 }
 .colors-card .card-header {
   background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);

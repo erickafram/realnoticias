@@ -19,9 +19,11 @@ const HomeEditorController = require('../controllers/HomeEditorController');
 const AIController = require('../controllers/AIController');
 const PetitionController = require('../controllers/PetitionController');
 const STFController = require('../controllers/STFController');
+const ApiSettingsController = require('../controllers/ApiSettingsController');
+const ModulesController = require('../controllers/ModulesController');
 
 // Middlewares
-const { isAuthenticated, isNotAuthenticated, isAdmin } = require('../middlewares/auth');
+const { isAuthenticated, isNotAuthenticated, isAdmin, isAdminOrGestor } = require('../middlewares/auth');
 const { uploadSingle, uploadMultiple } = require('../middlewares/upload');
 const {
   validate,
@@ -121,10 +123,16 @@ router.post('/banners/:id/delete', BannerController.destroy);
 router.post('/banners/:id/toggle-active', BannerController.toggleActive);
 
 // ==========================================
+// ROTAS APENAS PARA ADMIN E GESTOR
+// ==========================================
+router.use('/users', isAdminOrGestor);
+router.use('/settings', isAdminOrGestor);
+
+// ==========================================
 // ROTAS APENAS PARA ADMIN
 // ==========================================
-router.use('/users', isAdmin);
-router.use('/settings', isAdmin);
+router.use('/api', isAdmin);
+router.use('/modules', isAdmin);
 
 // ==========================================
 // USUÁRIOS (apenas admin)
@@ -138,12 +146,24 @@ router.post('/users/:id/delete', UserController.destroy);
 router.post('/users/:id/toggle-active', UserController.toggleActive);
 
 // ==========================================
-// CONFIGURAÇÕES (apenas admin)
+// CONFIGURAÇÕES (apenas admin e gestor)
 // ==========================================
 router.get('/settings', SettingController.index);
 router.post('/settings', SettingController.update);
 router.post('/settings/upload-logo', ...uploadSingle('logo'), SettingController.uploadLogo);
 router.post('/settings/remove-logo', SettingController.removeLogo);
+
+// ==========================================
+// API (apenas admin)
+// ==========================================
+router.get('/api', ApiSettingsController.index);
+router.post('/api', ApiSettingsController.update);
+
+// ==========================================
+// MÓDULOS (apenas admin)
+// ==========================================
+router.get('/modules', ModulesController.index);
+router.post('/modules', ModulesController.update);
 
 // ==========================================
 // EDITOR DA HOME
