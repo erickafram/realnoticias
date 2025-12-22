@@ -57,6 +57,19 @@ const isEditorOrAdmin = (req, res, next) => {
   return res.redirect('/admin');
 };
 
+// Verificar se o usuário é admin, gestor ou editor
+const isAdminGestorOrEditor = (req, res, next) => {
+  if (req.session && req.session.user) {
+    const role = req.session.user.role;
+    if (role === 'admin' || role === 'gestor' || role === 'editor') {
+      return next();
+    }
+  }
+  
+  req.flash('error', 'Você não tem permissão para acessar esta página.');
+  return res.redirect('/admin');
+};
+
 // Middleware para adicionar usuário às views
 const addUserToLocals = (req, res, next) => {
   res.locals.user = req.session.user || null;
@@ -78,6 +91,7 @@ module.exports = {
   isNotAuthenticated,
   isAdmin,
   isAdminOrGestor,
+  isAdminGestorOrEditor,
   isEditorOrAdmin,
   addUserToLocals,
   addFlashMessages

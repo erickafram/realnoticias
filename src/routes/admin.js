@@ -23,7 +23,7 @@ const ApiSettingsController = require('../controllers/ApiSettingsController');
 const ModulesController = require('../controllers/ModulesController');
 
 // Middlewares
-const { isAuthenticated, isNotAuthenticated, isAdmin, isAdminOrGestor } = require('../middlewares/auth');
+const { isAuthenticated, isNotAuthenticated, isAdmin, isAdminOrGestor, isAdminGestorOrEditor } = require('../middlewares/auth');
 const { uploadSingle, uploadMultiple } = require('../middlewares/upload');
 const {
   validate,
@@ -126,7 +126,11 @@ router.post('/banners/:id/toggle-active', BannerController.toggleActive);
 // ROTAS APENAS PARA ADMIN E GESTOR
 // ==========================================
 router.use('/users', isAdminOrGestor);
-router.use('/settings', isAdminOrGestor);
+
+// ==========================================
+// ROTAS PARA ADMIN, GESTOR E EDITOR
+// ==========================================
+router.use('/settings', isAdminGestorOrEditor);
 
 // ==========================================
 // ROTAS APENAS PARA ADMIN
