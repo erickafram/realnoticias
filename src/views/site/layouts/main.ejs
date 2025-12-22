@@ -110,32 +110,33 @@
     }
     
     /* Header Style: Centered */
+    .site-header.header-centered .header-main .container > .d-flex {
+      flex-wrap: wrap;
+      justify-content: center !important;
+    }
     .site-header.header-centered .header-main {
-      text-align: center;
       padding: 20px 0;
     }
-    .site-header.header-centered .header-main .container {
-      flex-direction: column;
-      gap: 16px;
-    }
     .site-header.header-centered .site-logo {
+      width: 100%;
       justify-content: center;
+      margin-bottom: 0;
     }
     .site-header.header-centered .header-search {
-      display: none;
+      display: none !important;
+    }
+    .site-header.header-centered .header-actions-wrapper {
+      position: absolute;
+      right: 15px;
+      top: 20px;
     }
     .site-header.header-centered .navbar {
       display: block !important;
       border-top: 1px solid var(--border-color);
     }
-    .site-header.header-centered .navbar-nav {
+    .site-header.header-centered .navbar .navbar-nav {
       justify-content: center;
-    }
-    .site-header.header-centered .header-actions {
-      position: absolute;
-      right: 15px;
-      top: 50%;
-      transform: translateY(-50%);
+      width: 100%;
     }
     
     /* Header Style: Minimal */
@@ -163,9 +164,11 @@
     }
     
     @media (max-width: 991px) {
-      .site-header.header-centered .header-actions {
+      .site-header.header-centered .header-actions-wrapper {
         position: static;
-        transform: none;
+      }
+      .site-header.header-centered .site-logo {
+        width: auto;
       }
       .site-header.header-centered .navbar {
         display: none !important;
@@ -972,7 +975,7 @@
     <!-- Main Header -->
     <div class="header-main">
       <div class="container">
-        <div class="d-flex align-items-center justify-content-between gap-3<%= headerStyle === 'centered' ? ' position-relative' : '' %>">
+        <div class="d-flex align-items-center justify-content-between gap-3<%= headerStyle === 'centered' ? ' flex-wrap position-relative' : '' %>">
           <a href="/" class="site-logo">
             <% if (settings.site_logo) { %>
               <img src="<%= settings.site_logo %>" alt="<%= settings.site_name || 'Portal' %>" class="logo-img">
@@ -995,12 +998,14 @@
           </nav>
           <% } %>
           
+          <% if (headerStyle !== 'centered') { %>
           <form action="/busca" method="GET" class="header-search d-none d-lg-block">
             <i class="bi bi-search"></i>
             <input type="text" name="q" placeholder="Buscar..." value="<%= typeof query !== 'undefined' ? query : '' %>">
           </form>
+          <% } %>
           
-          <div class="d-flex align-items-center gap-2<%= headerStyle === 'centered' ? ' header-actions' : '' %>">
+          <div class="d-flex align-items-center gap-2<%= headerStyle === 'centered' ? ' header-actions-wrapper' : '' %>">
             <% if (user) { %>
               <a href="/admin" class="header-user" title="Painel Admin">
                 <span class="user-avatar"><%= user.name.charAt(0).toUpperCase() %></span>
