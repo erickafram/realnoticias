@@ -178,6 +178,83 @@
       }
     }
     
+    /* Botão de busca para header centralizado */
+    .header-search-btn {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f1f5f9;
+      border: none;
+      border-radius: 50%;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 16px;
+    }
+    .header-search-btn:hover {
+      background: var(--primary-light);
+      color: var(--primary-color);
+    }
+    
+    /* Modal de busca */
+    .search-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 9999;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 100px;
+    }
+    .search-modal.active {
+      display: flex;
+    }
+    .search-modal-content {
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      animation: searchModalIn 0.2s ease;
+    }
+    @keyframes searchModalIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .search-modal-content .header-search {
+      max-width: 100%;
+    }
+    .search-modal-content .header-search input {
+      font-size: 18px;
+      padding: 16px 20px 16px 50px;
+    }
+    .search-modal-content .header-search i {
+      font-size: 20px;
+      left: 18px;
+    }
+    .search-modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      background: #fff;
+      border: none;
+      border-radius: 50%;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
     .header-top {
       background: var(--topbar-bg);
       padding: 8px 0;
@@ -1006,6 +1083,11 @@
           <% } %>
           
           <div class="d-flex align-items-center gap-2<%= headerStyle === 'centered' ? ' header-actions-wrapper' : '' %>">
+            <% if (headerStyle === 'centered') { %>
+            <button type="button" class="header-search-btn" onclick="toggleSearchModal()" title="Buscar">
+              <i class="bi bi-search"></i>
+            </button>
+            <% } %>
             <% if (user) { %>
               <a href="/admin" class="header-user" title="Painel Admin">
                 <span class="user-avatar"><%= user.name.charAt(0).toUpperCase() %></span>
@@ -1270,6 +1352,16 @@
     </div>
   </div>
 
+  <!-- Modal de Busca (para header centralizado) -->
+  <div class="search-modal" id="searchModal" onclick="if(event.target === this) toggleSearchModal()">
+    <div class="search-modal-content">
+      <form action="/busca" method="GET" class="header-search">
+        <i class="bi bi-search"></i>
+        <input type="text" name="q" placeholder="O que você está procurando?" value="<%= typeof query !== 'undefined' ? query : '' %>" autofocus>
+      </form>
+    </div>
+  </div>
+
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   
@@ -1292,6 +1384,17 @@
       parent.classList.toggle('expanded');
     }
     
+    function toggleSearchModal() {
+      const modal = document.getElementById('searchModal');
+      modal.classList.toggle('active');
+      if (modal.classList.contains('active')) {
+        document.body.style.overflow = 'hidden';
+        modal.querySelector('input').focus();
+      } else {
+        document.body.style.overflow = '';
+      }
+    }
+    
     // Fechar menu ao clicar em um link (exceto os que têm submenu)
     document.querySelectorAll('.mobile-nav-link:not([onclick])').forEach(link => {
       link.addEventListener('click', closeMobileMenu);
@@ -1300,9 +1403,13 @@
       link.addEventListener('click', closeMobileMenu);
     });
     
-    // Fechar menu com ESC
+    // Fechar menu e modal com ESC
     document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') closeMobileMenu();
+      if (e.key === 'Escape') {
+        closeMobileMenu();
+        const modal = document.getElementById('searchModal');
+        if (modal.classList.contains('active')) toggleSearchModal();
+      }
     });
   </script>
   
