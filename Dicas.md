@@ -21,6 +21,9 @@ pm2 restart participato
 
 #Servidor de Produção Real Noticias
 cd /home/realnoticias/htdocs/realnoticias.com.br
+git checkout --ours src/app.js
+git add src/app.js
+git stash drop
 git pull origin main
 npx sequelize-cli db:migrate
 npx sequelize-cli db:seed:all
