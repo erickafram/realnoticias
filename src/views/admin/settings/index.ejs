@@ -162,6 +162,18 @@
         </div>
       </div>
       
+      <!-- Favicon -->
+      <div class="settings-card">
+        <div class="card-header"><i class="bi bi-app-indicator"></i><span>Favicon</span></div>
+        <div class="card-body">
+          <div class="form-group">
+            <label>URL do Favicon</label>
+            <input type="text" name="site_favicon" value="${groupedSettings.general?.find(s => s.key === 'site_favicon')?.value || '/images/favicon.ico'}" placeholder="/images/favicon.ico">
+            <small>Ícone exibido na aba do navegador (formato .ico, .png ou .svg)</small>
+          </div>
+        </div>
+      </div>
+      
       <!-- Paleta de Cores -->
       <div class="settings-card full-width colors-card">
         <div class="card-header">

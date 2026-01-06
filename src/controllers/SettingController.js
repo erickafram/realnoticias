@@ -83,8 +83,14 @@ class SettingController {
           let group = 'general';
           if (key.startsWith('color_')) {
             group = 'colors';
-          } else if (key === 'header_style' || key === 'logo_size') {
+          } else if (key === 'header_style' || key === 'logo_size' || key === 'menu_font_size' || key === 'home_hide_categories') {
             group = 'layout';
+          } else if (key.startsWith('ads_')) {
+            group = 'ads';
+          } else if (key.startsWith('code_')) {
+            group = 'code_injection';
+          } else if (key === 'google_site_verification') {
+            group = 'seo';
           }
           
           await Setting.create({
