@@ -63,6 +63,9 @@ class HomeEditorController {
       // Pegar a maior ordem atual
       const maxOrder = await HomeBlock.max('order') || 0;
 
+      // Helper para converter valor para boolean
+      const toBool = (val) => val === true || val === 'true' || val === '1';
+
       const block = await HomeBlock.create({
         type,
         title: title || null,
@@ -70,10 +73,10 @@ class HomeEditorController {
         category_ids: category_ids || null,
         banner_id: type === 'banner' ? banner_id : null,
         posts_count: posts_count || 4,
-        show_title: show_title !== 'false',
-        show_excerpt: show_excerpt !== 'false',
-        show_date: show_date !== 'false',
-        show_category: show_category !== 'false',
+        show_title: toBool(show_title),
+        show_excerpt: toBool(show_excerpt),
+        show_date: toBool(show_date),
+        show_category: toBool(show_category),
         background_color: background_color || '#ffffff',
         offset: offset || 0,
         order: maxOrder + 1,
@@ -98,6 +101,9 @@ class HomeEditorController {
         return res.json({ success: false, message: 'Bloco não encontrado.' });
       }
 
+      // Helper para converter valor para boolean
+      const toBool = (val) => val === true || val === 'true' || val === '1';
+
       await block.update({
         type,
         title: title || null,
@@ -105,13 +111,13 @@ class HomeEditorController {
         category_ids: category_ids || null,
         banner_id: type === 'banner' ? banner_id : null,
         posts_count: posts_count || 4,
-        show_title: show_title !== 'false',
-        show_excerpt: show_excerpt !== 'false',
-        show_date: show_date !== 'false',
-        show_category: show_category !== 'false',
+        show_title: toBool(show_title),
+        show_excerpt: toBool(show_excerpt),
+        show_date: toBool(show_date),
+        show_category: toBool(show_category),
         background_color: background_color || '#ffffff',
         offset: offset || 0,
-        active: active !== 'false'
+        active: active !== false && active !== 'false' && active !== '0'
       });
 
       res.json({ success: true, block });
