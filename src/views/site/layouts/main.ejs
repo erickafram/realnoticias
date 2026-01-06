@@ -7,6 +7,11 @@
   <meta name="keywords" content="<%= settings.site_keywords || '' %>">
   <meta name="author" content="<%= settings.site_name || 'Portal Convictos' %>">
   
+  <!-- Google Site Verification -->
+  <% if (settings.google_site_verification) { %>
+  <meta name="google-site-verification" content="<%= settings.google_site_verification %>">
+  <% } %>
+  
   <!-- Open Graph -->
   <meta property="og:title" content="<%= title %>">
   <meta property="og:description" content="<%= typeof metaDescription !== 'undefined' ? metaDescription : (settings.site_description || '') %>">
@@ -61,6 +66,7 @@
       --menu-bg: <%= settings.color_menu_bg || '#ffffff' %>;
       --menu-text: <%= settings.color_menu_text || '#0f172a' %>;
       --menu-hover: <%= settings.color_menu_hover || '#3b82f6' %>;
+      --menu-font-size: <%= settings.menu_font_size || '14' %>px;
       
       /* Corpo */
       --bg-light: <%= settings.color_body_bg || '#f8fafc' %>;
@@ -349,7 +355,7 @@
       color: var(--menu-text) !important;
       font-weight: 500;
       padding: 14px 16px !important;
-      font-size: 14px;
+      font-size: var(--menu-font-size);
       position: relative;
     }
     
@@ -1027,8 +1033,18 @@
       margin-bottom: 0;
     }
   </style>
+  
+  <!-- Código customizado no head -->
+  <% if (settings.code_head) { %>
+  <%- settings.code_head %>
+  <% } %>
 </head>
 <body>
+  <!-- Código customizado após body -->
+  <% if (settings.code_body_start) { %>
+  <%- settings.code_body_start %>
+  <% } %>
+  
   <% const headerStyle = settings.header_style || 'default'; %>
   <!-- Header -->
   <header class="site-header<%= headerStyle !== 'default' ? ' header-' + headerStyle : '' %>">
@@ -1425,5 +1441,10 @@
       });
     });
   </script>
+  
+  <!-- Código customizado antes de fechar body -->
+  <% if (settings.code_body_end) { %>
+  <%- settings.code_body_end %>
+  <% } %>
 </body>
 </html>

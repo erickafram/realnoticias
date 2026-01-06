@@ -554,6 +554,180 @@
         </div>
       </div>
       
+      <!-- SEO e Verificação -->
+      <div class="settings-card seo-card">
+        <div class="card-header">
+          <i class="bi bi-search"></i>
+          <span>SEO e Verificação</span>
+        </div>
+        <div class="card-body">
+          <p class="seo-description">Configure a verificação do Google Search Console e outras ferramentas de SEO.</p>
+          
+          <div class="form-group">
+            <label>Google Site Verification</label>
+            <input type="text" name="google_site_verification" value="${groupedSettings.seo?.find(s => s.key === 'google_site_verification')?.value || ''}" placeholder="Ex: abc123xyz...">
+            <small>Cole apenas o código de verificação (sem a meta tag). Será adicionado automaticamente no &lt;head&gt;.</small>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Tamanho da Fonte do Menu -->
+      <div class="settings-card menu-card">
+        <div class="card-header">
+          <i class="bi bi-fonts"></i>
+          <span>Tamanho da Fonte do Menu</span>
+        </div>
+        <div class="card-body">
+          <p class="menu-description">Ajuste o tamanho da fonte do menu de navegação.</p>
+          
+          <div class="form-group">
+            <label>Tamanho da Fonte (px)</label>
+            <div class="font-size-options">
+              <label class="font-size-option ${(groupedSettings.layout?.find(s => s.key === 'menu_font_size')?.value || '14') === '12' ? 'active' : ''}">
+                <input type="radio" name="menu_font_size" value="12" ${(groupedSettings.layout?.find(s => s.key === 'menu_font_size')?.value || '14') === '12' ? 'checked' : ''}>
+                <span style="font-size: 12px;">Aa</span>
+                <small>12px</small>
+              </label>
+              <label class="font-size-option ${(groupedSettings.layout?.find(s => s.key === 'menu_font_size')?.value || '14') === '14' ? 'active' : ''}">
+                <input type="radio" name="menu_font_size" value="14" ${(groupedSettings.layout?.find(s => s.key === 'menu_font_size')?.value || '14') === '14' ? 'checked' : ''}>
+                <span style="font-size: 14px;">Aa</span>
+                <small>14px</small>
+              </label>
+              <label class="font-size-option ${(groupedSettings.layout?.find(s => s.key === 'menu_font_size')?.value || '14') === '16' ? 'active' : ''}">
+                <input type="radio" name="menu_font_size" value="16" ${(groupedSettings.layout?.find(s => s.key === 'menu_font_size')?.value || '14') === '16' ? 'checked' : ''}>
+                <span style="font-size: 16px;">Aa</span>
+                <small>16px</small>
+              </label>
+              <label class="font-size-option ${(groupedSettings.layout?.find(s => s.key === 'menu_font_size')?.value || '14') === '18' ? 'active' : ''}">
+                <input type="radio" name="menu_font_size" value="18" ${(groupedSettings.layout?.find(s => s.key === 'menu_font_size')?.value || '14') === '18' ? 'checked' : ''}>
+                <span style="font-size: 18px;">Aa</span>
+                <small>18px</small>
+              </label>
+              <label class="font-size-option ${(groupedSettings.layout?.find(s => s.key === 'menu_font_size')?.value || '14') === '20' ? 'active' : ''}">
+                <input type="radio" name="menu_font_size" value="20" ${(groupedSettings.layout?.find(s => s.key === 'menu_font_size')?.value || '14') === '20' ? 'checked' : ''}>
+                <span style="font-size: 20px;">Aa</span>
+                <small>20px</small>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Opções da Home -->
+      <div class="settings-card home-options-card">
+        <div class="card-header">
+          <i class="bi bi-house-gear"></i>
+          <span>Opções da Home</span>
+        </div>
+        <div class="card-body">
+          <div class="module-item">
+            <div class="module-info">
+              <div class="module-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                <i class="bi bi-grid"></i>
+              </div>
+              <div class="module-details">
+                <h5>Ocultar Categorias na Sidebar</h5>
+                <p>Remove o widget de categorias da sidebar da home</p>
+              </div>
+            </div>
+            <div class="module-toggle">
+              <label class="switch">
+                <input type="checkbox" name="home_hide_categories" value="1" ${groupedSettings.layout?.find(s => s.key === 'home_hide_categories')?.value === '1' ? 'checked' : ''}>
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Injeção de Código -->
+      <div class="settings-card code-card">
+        <div class="card-header">
+          <i class="bi bi-code-slash"></i>
+          <span>Injeção de Código</span>
+        </div>
+        <div class="card-body">
+          <p class="code-description">Adicione código personalizado no cabeçalho e rodapé do site. Útil para Google Analytics, pixels de rastreamento, etc.</p>
+          
+          <div class="form-group">
+            <label><i class="bi bi-chevron-double-up"></i> Código no &lt;head&gt;</label>
+            <textarea name="code_head" rows="4" placeholder="<!-- Cole aqui scripts, meta tags, etc -->">${groupedSettings.code_injection?.find(s => s.key === 'code_head')?.value || ''}</textarea>
+            <small>Será inserido antes do fechamento da tag &lt;/head&gt;</small>
+          </div>
+          
+          <div class="form-group">
+            <label><i class="bi bi-box-arrow-in-down"></i> Código após &lt;body&gt;</label>
+            <textarea name="code_body_start" rows="4" placeholder="<!-- Cole aqui scripts que precisam carregar no início -->">${groupedSettings.code_injection?.find(s => s.key === 'code_body_start')?.value || ''}</textarea>
+            <small>Será inserido logo após a abertura da tag &lt;body&gt;</small>
+          </div>
+          
+          <div class="form-group">
+            <label><i class="bi bi-chevron-double-down"></i> Código antes de &lt;/body&gt;</label>
+            <textarea name="code_body_end" rows="4" placeholder="<!-- Cole aqui scripts que precisam carregar no final -->">${groupedSettings.code_injection?.find(s => s.key === 'code_body_end')?.value || ''}</textarea>
+            <small>Será inserido antes do fechamento da tag &lt;/body&gt;</small>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Anúncios -->
+      <div class="settings-card ads-card">
+        <div class="card-header">
+          <i class="bi bi-megaphone"></i>
+          <span>Anúncios</span>
+        </div>
+        <div class="card-body">
+          <p class="ads-description">Configure os espaços de anúncios na home e nas postagens. Cole o código HTML/JS do seu provedor de anúncios (Google AdSense, etc).</p>
+          
+          <div class="ads-section">
+            <h4><i class="bi bi-house"></i> Anúncios na Home</h4>
+            
+            <div class="form-group">
+              <label>Topo da Home</label>
+              <textarea name="ads_home_top" rows="3" placeholder="<!-- Código do anúncio -->">${groupedSettings.ads?.find(s => s.key === 'ads_home_top')?.value || ''}</textarea>
+            </div>
+            
+            <div class="form-group">
+              <label>Meio da Home</label>
+              <textarea name="ads_home_middle" rows="3" placeholder="<!-- Código do anúncio -->">${groupedSettings.ads?.find(s => s.key === 'ads_home_middle')?.value || ''}</textarea>
+            </div>
+            
+            <div class="form-group">
+              <label>Rodapé da Home</label>
+              <textarea name="ads_home_bottom" rows="3" placeholder="<!-- Código do anúncio -->">${groupedSettings.ads?.find(s => s.key === 'ads_home_bottom')?.value || ''}</textarea>
+            </div>
+            
+            <div class="form-group">
+              <label>Sidebar da Home</label>
+              <textarea name="ads_home_sidebar" rows="3" placeholder="<!-- Código do anúncio -->">${groupedSettings.ads?.find(s => s.key === 'ads_home_sidebar')?.value || ''}</textarea>
+            </div>
+          </div>
+          
+          <div class="ads-section">
+            <h4><i class="bi bi-file-text"></i> Anúncios nas Postagens</h4>
+            
+            <div class="form-group">
+              <label>Topo do Post</label>
+              <textarea name="ads_post_top" rows="3" placeholder="<!-- Código do anúncio -->">${groupedSettings.ads?.find(s => s.key === 'ads_post_top')?.value || ''}</textarea>
+            </div>
+            
+            <div class="form-group">
+              <label>Meio do Post (após 3º parágrafo)</label>
+              <textarea name="ads_post_middle" rows="3" placeholder="<!-- Código do anúncio -->">${groupedSettings.ads?.find(s => s.key === 'ads_post_middle')?.value || ''}</textarea>
+            </div>
+            
+            <div class="form-group">
+              <label>Rodapé do Post</label>
+              <textarea name="ads_post_bottom" rows="3" placeholder="<!-- Código do anúncio -->">${groupedSettings.ads?.find(s => s.key === 'ads_post_bottom')?.value || ''}</textarea>
+            </div>
+            
+            <div class="form-group">
+              <label>Sidebar do Post</label>
+              <textarea name="ads_post_sidebar" rows="3" placeholder="<!-- Código do anúncio -->">${groupedSettings.ads?.find(s => s.key === 'ads_post_sidebar')?.value || ''}</textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      
       <button type="submit" class="btn-save">
         <i class="bi bi-check-lg"></i>
         Salvar Configurações
@@ -1496,12 +1670,203 @@ input:checked + .slider:before {
 .size-large { width: 50px; height: 25px; }
 .size-xlarge { width: 60px; height: 30px; }
 
+/* SEO Card */
+.seo-card {
+  border: 1px solid #fef3c7;
+  background: linear-gradient(135deg, #fffbeb 0%, #fef9c3 100%);
+}
+.seo-card .card-header {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #fff;
+  border-bottom: none;
+}
+.seo-card .card-header i {
+  color: #fff;
+}
+.seo-description {
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 20px;
+  padding: 12px;
+  background: #fff;
+  border-radius: 8px;
+  border-left: 3px solid #f59e0b;
+}
+
+/* Menu Font Size Card */
+.menu-card {
+  border: 1px solid #e0e7ff;
+  background: linear-gradient(135deg, #fafbff 0%, #f0f4ff 100%);
+}
+.menu-card .card-header {
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  color: #fff;
+  border-bottom: none;
+}
+.menu-card .card-header i {
+  color: #fff;
+}
+.menu-description {
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 20px;
+  padding: 12px;
+  background: #fff;
+  border-radius: 8px;
+  border-left: 3px solid #6366f1;
+}
+.font-size-options {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+.font-size-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 10px;
+  background: #fff;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.font-size-option:hover {
+  border-color: #6366f1;
+}
+.font-size-option.active {
+  border-color: #6366f1;
+  background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+}
+.font-size-option input {
+  display: none;
+}
+.font-size-option span {
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 4px;
+}
+.font-size-option small {
+  font-size: 10px;
+  color: #64748b;
+}
+
+/* Home Options Card */
+.home-options-card {
+  border: 1px solid #fed7aa;
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+}
+.home-options-card .card-header {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  color: #fff;
+  border-bottom: none;
+}
+.home-options-card .card-header i {
+  color: #fff;
+}
+
+/* Code Injection Card */
+.code-card {
+  border: 1px solid #d1d5db;
+  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+}
+.code-card .card-header {
+  background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+  color: #fff;
+  border-bottom: none;
+}
+.code-card .card-header i {
+  color: #fff;
+}
+.code-description {
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 20px;
+  padding: 12px;
+  background: #fff;
+  border-radius: 8px;
+  border-left: 3px solid #374151;
+}
+.code-card textarea {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 12px;
+  background: #1e293b;
+  color: #e2e8f0;
+  border: 1px solid #334155;
+}
+.code-card textarea:focus {
+  border-color: #60a5fa;
+  background: #0f172a;
+}
+.code-card textarea::placeholder {
+  color: #64748b;
+}
+
+/* Ads Card */
+.ads-card {
+  border: 1px solid #bbf7d0;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+}
+.ads-card .card-header {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: #fff;
+  border-bottom: none;
+}
+.ads-card .card-header i {
+  color: #fff;
+}
+.ads-description {
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 20px;
+  padding: 12px;
+  background: #fff;
+  border-radius: 8px;
+  border-left: 3px solid #22c55e;
+}
+.ads-section {
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #d1fae5;
+}
+.ads-section:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+.ads-section h4 {
+  font-size: 13px;
+  font-weight: 600;
+  color: #166534;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ads-section h4 i {
+  color: #22c55e;
+}
+.ads-card textarea {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 12px;
+  background: #f8fafc;
+  border: 1px solid #d1fae5;
+}
+.ads-card textarea:focus {
+  border-color: #22c55e;
+  background: #fff;
+}
+
 @media (max-width: 768px) {
   .header-style-options {
     grid-template-columns: 1fr;
   }
   .logo-size-options {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .font-size-options {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 </style>
@@ -1749,6 +2114,14 @@ document.querySelectorAll('.logo-size-option input').forEach(input => {
   input.addEventListener('change', function() {
     document.querySelectorAll('.logo-size-option').forEach(opt => opt.classList.remove('active'));
     this.closest('.logo-size-option').classList.add('active');
+  });
+});
+
+// Font size options
+document.querySelectorAll('.font-size-option input').forEach(input => {
+  input.addEventListener('change', function() {
+    document.querySelectorAll('.font-size-option').forEach(opt => opt.classList.remove('active'));
+    this.closest('.font-size-option').classList.add('active');
   });
 });
 </script>

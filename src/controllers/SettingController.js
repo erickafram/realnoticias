@@ -34,7 +34,10 @@ class SettingController {
           posts: 'Posts',
           footer: 'Rodapé',
           modules: 'Módulos',
-          ai: 'Assistente de IA'
+          ai: 'Assistente de IA',
+          seo: 'SEO e Verificação',
+          code_injection: 'Injeção de Código',
+          ads: 'Anúncios'
         },
         nodeVersion: process.version,
         nodeEnv: process.env.NODE_ENV || 'development'

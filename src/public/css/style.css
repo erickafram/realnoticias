@@ -664,3 +664,43 @@
   width: 100%;
   border-radius: var(--radius-md);
 }
+
+/* ========================================
+   ADS STYLES (Manual Ads)
+   ======================================== */
+.ads-area {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.ads-area.ads-top {
+  background: var(--bg-light);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.ads-area.ads-content {
+  padding: 20px;
+  margin: 20px 0;
+  background: var(--bg-light);
+  border-radius: var(--radius-md);
+}
+
+.ads-area.ads-middle,
+.ads-area.ads-bottom {
+  background: var(--bg-gray);
+  margin: 30px 0;
+  padding: 30px 0;
+}
+
+.ads-sidebar {
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  margin-bottom: 20px;
+}
+
+.ads-widget {
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
