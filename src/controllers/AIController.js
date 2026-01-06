@@ -149,7 +149,7 @@ LIMITE: Não inventar falas graves, proteger vítimas em temas sensíveis.`
     return new Promise((resolve, reject) => {
       const apiKey = settings.ai_api_key;
       const apiUrl = settings.ai_api_url || 'https://api.together.xyz/v1/chat/completions';
-      const model = settings.ai_model || 'meta-llama/Llama-3-70b-chat-hf';
+      const model = settings.ai_model || 'meta-llama/Llama-3.3-70B-Instruct-Turbo';
 
       const urlParts = new URL(apiUrl);
       const isHttps = urlParts.protocol === 'https:';
