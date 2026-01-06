@@ -33,6 +33,8 @@ class SettingController {
           social: 'Redes Sociais',
           posts: 'Posts',
           footer: 'Rodapé',
+          layout: 'Layout',
+          colors: 'Cores',
           modules: 'Módulos',
           ai: 'Assistente de IA',
           seo: 'SEO e Verificação',
