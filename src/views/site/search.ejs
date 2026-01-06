@@ -78,6 +78,7 @@
     
     <!-- Sidebar -->
     <div class="col-lg-4">
+      ${settings.home_hide_categories !== '1' ? `
       <div class="sidebar-widget">
         <h4 class="widget-title">Categorias</h4>
         <ul class="category-list">
@@ -90,6 +91,7 @@
           `).join('')}
         </ul>
       </div>
+      ` : ''}
     </div>
   </div>
 </div>

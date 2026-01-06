@@ -101,6 +101,7 @@ ${banners && banners.category_top && banners.category_top.length > 0 ? `
         </div>
 
         <!-- Categories Widget -->
+        ${settings.home_hide_categories !== '1' ? `
         <div class="sidebar-widget mb-4">
           <h5 class="widget-title mb-3">Categorias</h5>
           <div class="d-flex flex-column gap-2">
@@ -115,6 +116,7 @@ ${banners && banners.category_top && banners.category_top.length > 0 ? `
             `).join('')}
           </div>
         </div>
+        ` : ''}
         
         <!-- Newsletter Widget -->
         <div class="card bg-dark text-white border-0 overflow-hidden">

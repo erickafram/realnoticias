@@ -195,6 +195,7 @@ ${banners && banners.post_top && banners.post_top.length > 0 ? `
         </div>
         
         <!-- Categorias -->
+        ${settings.home_hide_categories !== '1' ? `
         <div class="sidebar-box">
           <h3>Categorias</h3>
           <div class="categories-list">
@@ -207,6 +208,7 @@ ${banners && banners.post_top && banners.post_top.length > 0 ? `
             `).join('')}
           </div>
         </div>
+        ` : ''}
       </aside>
     </div>
   </div>
