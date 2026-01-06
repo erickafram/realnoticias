@@ -61,7 +61,8 @@ class SettingController {
         // Converter array/objeto para string se necessário
         let finalValue = value;
         if (Array.isArray(value)) {
-          finalValue = value.join(',');
+          // Para checkboxes com hidden, pegar o último valor (o checkbox marcado)
+          finalValue = value[value.length - 1];
         } else if (typeof value === 'object' && value !== null) {
           finalValue = JSON.stringify(value);
         } else {

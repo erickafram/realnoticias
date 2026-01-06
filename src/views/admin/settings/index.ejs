@@ -632,6 +632,7 @@
             </div>
             <div class="module-toggle">
               <label class="switch">
+                <input type="hidden" name="home_hide_categories" value="0">
                 <input type="checkbox" name="home_hide_categories" value="1" ${groupedSettings.layout?.find(s => s.key === 'home_hide_categories')?.value === '1' ? 'checked' : ''}>
                 <span class="slider"></span>
               </label>
