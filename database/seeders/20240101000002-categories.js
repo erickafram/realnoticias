@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    const categories = [
+    await queryInterface.bulkInsert('categories', [
       {
         name: 'Notícias',
         slug: 'noticias',
@@ -59,18 +59,7 @@ module.exports = {
         created_at: new Date(),
         updated_at: new Date()
       }
-    ];
-
-    // Inserir apenas se não existir
-    for (const category of categories) {
-      const exists = await queryInterface.rawSelect('categories', {
-        where: { slug: category.slug }
-      }, ['id']);
-      
-      if (!exists) {
-        await queryInterface.bulkInsert('categories', [category]);
-      }
-    }
+    ]);
   },
 
   async down(queryInterface, Sequelize) {

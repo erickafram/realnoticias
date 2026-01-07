@@ -11,6 +11,12 @@ npx sequelize-cli db:migrate
 npx sequelize-cli db:seed:all
 pm2 restart portalconvictos
 
+git fetch origin
+git reset --hard origin/main
+npm install
+pm2 restart portalconvictos
+
+
 
 #Servidor de Produção Participa TO
 cd /home/participato/htdocs/participato.com.br/participato

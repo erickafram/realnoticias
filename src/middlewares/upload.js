@@ -34,13 +34,43 @@ const storage = multer.diskStorage({
 
 // Filtro de tipos de arquivo permitidos
 const fileFilter = (req, file, cb) => {
-  const allowedTypes = /jpeg|jpg|png|gif|webp|svg/;
-  const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
-  const mimetype = allowedTypes.test(file.mimetype);
+  // Extensões permitidas
+  const allowedExtensions = /\.(jpeg|jpg|png|gif|webp|svg)$/i;
   
-  if (extname && mimetype) {
+  // Mimetypes permitidos (incluindo variações)
+  const allowedMimetypes = [
+    'image/jpeg',
+    'image/jpg',
+    'image/png',
+    'image/gif',
+    'image/webp',
+    'image/svg+xml',
+    'image/svg',
+    // Alguns sistemas enviam esses mimetypes alternativos
+    'application/octet-stream', // Quando o browser não consegue detectar
+    'image/x-png',
+    'image/pjpeg'
+  ];
+  
+  const extname = allowedExtensions.test(path.extname(file.originalname).toLowerCase());
+  const mimetype = allowedMimetypes.includes(file.mimetype.toLowerCase());
+  
+  // Aceita se a extensão for válida (mesmo que mimetype seja genérico)
+  if (extname) {
     return cb(null, true);
   }
+  
+  // Ou se o mimetype for de imagem válido
+  if (mimetype && file.mimetype.startsWith('image/')) {
+    return cb(null, true);
+  }
+  
+  console.log('Upload rejeitado:', {
+    originalname: file.originalname,
+    mimetype: file.mimetype,
+    extname: path.extname(file.originalname)
+  });
+  
   cb(new Error('Apenas imagens são permitidas (jpeg, jpg, png, gif, webp, svg)'));
 };
 
