@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.bulkInsert('settings', [
+    const settings = [
       // Configurações Gerais
       {
         key: 'site_name',
@@ -159,7 +159,18 @@ module.exports = {
         created_at: new Date(),
         updated_at: new Date()
       }
-    ]);
+    ];
+
+    // Inserir apenas se não existir
+    for (const setting of settings) {
+      const exists = await queryInterface.rawSelect('settings', {
+        where: { key: setting.key }
+      }, ['id']);
+      
+      if (!exists) {
+        await queryInterface.bulkInsert('settings', [setting]);
+      }
+    }
   },
 
   async down(queryInterface, Sequelize) {

@@ -6,7 +6,7 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     const passwordHash = await bcrypt.hash('admin123', 10);
     
-    await queryInterface.bulkInsert('users', [
+    const users = [
       {
         name: 'Administrador',
         email: 'admin@portal.com',
@@ -25,7 +25,18 @@ module.exports = {
         created_at: new Date(),
         updated_at: new Date()
       }
-    ]);
+    ];
+
+    // Inserir apenas se não existir
+    for (const user of users) {
+      const exists = await queryInterface.rawSelect('users', {
+        where: { email: user.email }
+      }, ['id']);
+      
+      if (!exists) {
+        await queryInterface.bulkInsert('users', [user]);
+      }
+    }
   },
 
   async down(queryInterface, Sequelize) {
