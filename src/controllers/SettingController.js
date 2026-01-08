@@ -93,6 +93,8 @@ class SettingController {
             group = 'code_injection';
           } else if (key === 'google_site_verification') {
             group = 'seo';
+          } else if (key.startsWith('site_')) {
+            group = 'general';
           }
           
           await Setting.create({

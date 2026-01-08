@@ -33,7 +33,7 @@
   <meta name="twitter:image" content="<%= ogImage.startsWith('http') ? ogImage : siteUrl + ogImage %>">
   <% } %>
   
-  <title><%= title %> | <%= settings.site_name || 'Portal Convictos' %></title>
+  <title><%= settings.site_name || 'Portal' %><% if (title && title !== 'Início') { %> | <%= title %><% } else if (settings.site_tagline) { %> | <%= settings.site_tagline %><% } %></title>
   
   <!-- Favicon -->
   <link rel="icon" href="<%= settings.site_favicon || '/images/favicon.ico' %>" type="image/x-icon">
