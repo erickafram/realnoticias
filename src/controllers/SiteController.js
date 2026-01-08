@@ -120,8 +120,13 @@ class SiteController {
         // Continua sem blocos - vai usar o fallback na view
       }
 
+      // Título da home: usa tagline se existir, senão usa descrição curta
+      const siteName = res.locals.settings.site_name || 'Portal';
+      const tagline = res.locals.settings.site_tagline || '';
+      const homeTitle = tagline || 'Início';
+
       res.render('site/home', {
-        title: res.locals.settings.site_name || 'Portal Convictos',
+        title: homeTitle,
         metaDescription: res.locals.settings.site_description,
         featuredPosts,
         latestPosts,

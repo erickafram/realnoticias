@@ -17,7 +17,19 @@ REGRAS ABSOLUTAS - NUNCA QUEBRE:
 3. Se faltar informação, indique com [a confirmar] ou omita
 4. Reescreva SEMPRE com suas próprias palavras - NUNCA copie
 5. Texto deve ser 100% original e humanizado
-6. Português brasileiro padrão, sem erros gramaticais`;
+6. Português brasileiro padrão, sem erros gramaticais
+
+REGRAS DE ESTILO - MUITO IMPORTANTE:
+7. EVITE REPETIÇÕES: Nunca repita a mesma palavra mais de 2x no texto. Use SINÔNIMOS:
+   - acidente → colisão, batida, sinistro, ocorrência, incidente
+   - rodovia → estrada, via, pista, trecho, BR/TO (sigla)
+   - vítima → ferido, envolvido, pessoa, motorista, condutor
+   - veículo → carro, automóvel, caminhão, moto (conforme o caso)
+   - polícia → autoridades, agentes, equipe policial, PM, PRF
+   - hospital → unidade de saúde, UPA, pronto-socorro
+8. VARIE as estruturas das frases - não comece parágrafos da mesma forma
+9. CITE APENAS UMA FONTE principal no texto (ex: "segundo a PRF" ou "de acordo com o Corpo de Bombeiros")
+10. Não repita a fonte a cada parágrafo - mencione uma vez e use "ainda segundo a fonte" se necessário`;
 
     const styles = {
       globo: `Você é um redator sênior do G1/Globo, especialista em hard news.
@@ -27,14 +39,14 @@ ${baseRules}
 ESTILO G1/GLOBO - Hard News:
 - Linguagem IMPESSOAL, objetiva e neutra
 - Sem ironia, sem gíria, sem adjetivo opinativo
-- SEMPRE atribuir informações a fontes: "segundo a polícia", "a PGR afirma"
+- Atribuir informações à fonte principal UMA VEZ no início
 - Verbos de atribuição: "afirma", "aponta", "disse", "informou"
 
 ESTRUTURA OBRIGATÓRIA:
 1. TÍTULO: Responde "quem + o quê + onde/por quê" de forma direta, sem trocadilhos
 2. SUBTÍTULO: Complementa com 1-2 informações importantes (valor, data, afetados)
 3. LIDE (1º parágrafo): O fato principal - o que aconteceu, onde, quando, quem
-4. CORPO: Detalhes, contexto, dados concretos, fontes institucionais
+4. CORPO: Detalhes, contexto, dados concretos - USE SINÔNIMOS para variar
 5. SERVIÇO (se aplicável): "O que muda", "Quem tem direito", listas claras
 
 TOM: Sério, informativo, de serviço público. Como se estivesse no Jornal Nacional.`,
@@ -149,7 +161,7 @@ LIMITE: Não inventar falas graves, proteger vítimas em temas sensíveis.`
     return new Promise((resolve, reject) => {
       const apiKey = settings.ai_api_key;
       const apiUrl = settings.ai_api_url || 'https://api.together.xyz/v1/chat/completions';
-      const model = settings.ai_model || 'meta-llama/Llama-3.3-70B-Instruct-Turbo';
+      const model = settings.ai_model || 'deepseek-ai/DeepSeek-V3';
 
       const urlParts = new URL(apiUrl);
       const isHttps = urlParts.protocol === 'https:';
@@ -238,12 +250,14 @@ LIMITE: Não inventar falas graves, proteger vítimas em temas sensíveis.`
       const { keyword, searchWeb, style = 'globo' } = req.body;
       
       if (!keyword) {
-        return res.status(400).json({ success: false, message: 'Tema é obrigatório.' });
+        return res.status(400).json({ success: false, message: 'Descrição do assunto é obrigatória.' });
       }
 
       let context = '';
       if (searchWeb) {
-        context = await this.searchWeb(keyword);
+        // Extrair palavras-chave da descrição para busca mais eficiente
+        const searchTerms = keyword.split(' ').slice(0, 10).join(' ');
+        context = await this.searchWeb(searchTerms);
       }
 
       const hoje = new Date();
@@ -255,7 +269,7 @@ INSTRUÇÕES ESTILO G1/GLOBO:
 - Título direto respondendo "quem fez o quê"
 - Subtítulo com dado complementar importante
 - Lide objetivo no 1º parágrafo
-- Atribuir TUDO a fontes: "segundo...", "de acordo com..."
+- Citar a fonte principal UMA ÚNICA VEZ (ex: "De acordo com a PRF...")
 - Parágrafos curtos, linguagem neutra
 - Se for serviço: incluir "O que muda", "Como funciona"`,
 
@@ -283,31 +297,43 @@ INSTRUÇÕES ESTILO METRÓPOLES POLICIAL:
       if (context) {
         prompt = `DATA: ${dataAtual}
 
+DESCRIÇÃO DO ASSUNTO (informações principais fornecidas pelo jornalista):
+${keyword}
+
 ${context}
 
-TAREFA: Escreva uma matéria jornalística COMPLETA e ORIGINAL sobre "${keyword}".
+TAREFA: Escreva uma matéria jornalística COMPLETA e ORIGINAL baseada na descrição acima.
+Use as notícias da pesquisa para COMPLEMENTAR e ENRIQUECER com informações adicionais.
 
 ${styleInstructions[style] || styleInstructions.globo}
 
 REGRAS DE OURO:
-1. REESCREVA tudo com suas palavras - texto 100% original
-2. NÃO copie frases das notícias - apenas use as INFORMAÇÕES
-3. NÃO invente dados que não estão nas notícias
-4. Mínimo 8 parágrafos bem desenvolvidos
-5. Humanize o texto - deve parecer escrito por jornalista experiente
+1. PRIORIZE as informações da descrição fornecida
+2. Use a pesquisa para adicionar contexto e dados complementares
+3. REESCREVA tudo com suas palavras - texto 100% original
+4. NÃO copie frases - apenas use as INFORMAÇÕES
+5. EVITE REPETIR palavras - use SINÔNIMOS variados
+6. CITE APENAS UMA FONTE no texto todo (não repita "segundo X" a cada parágrafo)
+7. Mínimo 8 parágrafos bem desenvolvidos
+8. Humanize o texto - deve parecer escrito por jornalista experiente
 
 Retorne em JSON:
-{"title": "título", "subtitle": "subtítulo", "content": "HTML com <p> para parágrafos"}`;
+{"title": "título", "subtitle": "subtítulo", "content": "HTML com <p> para parágrafos", "source": "nome da fonte principal citada"}`;
       } else {
         prompt = `DATA: ${dataAtual}
 
-TAREFA: Escreva uma matéria jornalística sobre "${keyword}".
+DESCRIÇÃO DO ASSUNTO (informações principais fornecidas pelo jornalista):
+${keyword}
+
+TAREFA: Escreva uma matéria jornalística baseada EXCLUSIVAMENTE na descrição acima.
 
 ${styleInstructions[style] || styleInstructions.globo}
 
-IMPORTANTE: Como não há dados de pesquisa, crie uma matéria INFORMATIVA sobre o tema.
-- Use conhecimento geral, sem inventar fatos específicos
-- Se precisar de dados específicos, use [a confirmar] ou termos genéricos
+IMPORTANTE: 
+- Use APENAS as informações fornecidas na descrição
+- NÃO invente fatos, nomes ou dados que não foram mencionados
+- Se precisar de dados específicos não fornecidos, use [a confirmar]
+- EVITE REPETIR palavras - use SINÔNIMOS variados
 - Mínimo 6 parágrafos informativos
 
 Retorne em JSON:
@@ -323,9 +349,9 @@ Retorne em JSON:
       } catch (e) {
         const titleMatch = response.match(/"title":\s*"([^"]+)"/);
         const subtitleMatch = response.match(/"subtitle":\s*"([^"]+)"/);
-        const contentMatch = response.match(/"content":\s*"([\s\S]+?)"\s*}/);
+        const contentMatch = response.match(/"content":\s*"([\s\S]+?)"\s*[,}]/);
         result = {
-          title: titleMatch ? titleMatch[1] : keyword,
+          title: titleMatch ? titleMatch[1] : keyword.substring(0, 80),
           subtitle: subtitleMatch ? subtitleMatch[1] : '',
           content: contentMatch ? contentMatch[1].replace(/\\n/g, '\n').replace(/\\"/g, '"') : response
         };

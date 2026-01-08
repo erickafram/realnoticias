@@ -683,9 +683,9 @@
             </div>
             <div class="card-body">
               <div class="ai-generate-section">
-                <label class="form-label">Tema da matéria</label>
-                <input type="text" id="aiKeyword" class="form-control mb-2" placeholder="Ex: Acidente na BR-153 em Gurupi" maxlength="150">
-                <small class="text-muted d-block mb-2" style="font-size: 0.7rem;">Máximo 150 caracteres</small>
+                <label class="form-label">Descreva o assunto da matéria</label>
+                <textarea id="aiKeyword" class="form-control mb-2" rows="4" placeholder="Descreva as principais informações: o que aconteceu, onde, quando, quem está envolvido, etc.&#10;&#10;Ex: Acidente grave na BR-153, km 420, próximo a Gurupi. Colisão entre caminhão e carro de passeio. Duas vítimas socorridas pelo SAMU. PRF atendeu a ocorrência. Trânsito ficou lento por 2 horas." maxlength="500"></textarea>
+                <small class="text-muted d-block mb-2" style="font-size: 0.7rem;">Quanto mais detalhes, melhor será a matéria gerada (máx. 500 caracteres)</small>
                 
                 <label class="form-label">Estilo de escrita</label>
                 <select id="aiStyle" class="form-select mb-2">
@@ -1596,7 +1596,12 @@
     async function generateArticle() {
       const keyword = document.getElementById('aiKeyword').value.trim();
       if (!keyword) {
-        alert('Digite uma palavra-chave ou tema.');
+        alert('Descreva o assunto da matéria com as principais informações.');
+        return;
+      }
+      
+      if (keyword.length < 20) {
+        alert('Forneça mais detalhes sobre o assunto (mínimo 20 caracteres).');
         return;
       }
 

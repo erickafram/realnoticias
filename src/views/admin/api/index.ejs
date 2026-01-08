@@ -47,13 +47,14 @@
           <div class="form-group">
             <label>Modelo de IA</label>
             <select name="ai_model">
-              <option value="meta-llama/Llama-3.3-70B-Instruct-Turbo" ${aiSettings.ai_model === 'meta-llama/Llama-3.3-70B-Instruct-Turbo' ? 'selected' : ''}>Llama 3.3 70B Turbo (Recomendado)</option>
+              <option value="deepseek-ai/DeepSeek-V3" ${aiSettings.ai_model === 'deepseek-ai/DeepSeek-V3' || !aiSettings.ai_model ? 'selected' : ''}>DeepSeek V3 (Recomendado)</option>
+              <option value="deepseek-ai/DeepSeek-R1" ${aiSettings.ai_model === 'deepseek-ai/DeepSeek-R1' ? 'selected' : ''}>DeepSeek R1 (Raciocínio)</option>
+              <option value="meta-llama/Llama-3.3-70B-Instruct-Turbo" ${aiSettings.ai_model === 'meta-llama/Llama-3.3-70B-Instruct-Turbo' ? 'selected' : ''}>Llama 3.3 70B Turbo</option>
               <option value="meta-llama/Llama-3.1-8B-Instruct-Turbo" ${aiSettings.ai_model === 'meta-llama/Llama-3.1-8B-Instruct-Turbo' ? 'selected' : ''}>Llama 3.1 8B Turbo (Mais rápido)</option>
-              <option value="meta-llama/Llama-3.1-70B-Instruct-Turbo" ${aiSettings.ai_model === 'meta-llama/Llama-3.1-70B-Instruct-Turbo' ? 'selected' : ''}>Llama 3.1 70B Turbo</option>
-              <option value="mistralai/Mixtral-8x7B-Instruct-v0.1" ${aiSettings.ai_model === 'mistralai/Mixtral-8x7B-Instruct-v0.1' ? 'selected' : ''}>Mixtral 8x7B</option>
               <option value="Qwen/Qwen2.5-72B-Instruct-Turbo" ${aiSettings.ai_model === 'Qwen/Qwen2.5-72B-Instruct-Turbo' ? 'selected' : ''}>Qwen 2.5 72B Turbo</option>
+              <option value="mistralai/Mixtral-8x7B-Instruct-v0.1" ${aiSettings.ai_model === 'mistralai/Mixtral-8x7B-Instruct-v0.1' ? 'selected' : ''}>Mixtral 8x7B</option>
             </select>
-            <small>Modelos Turbo são otimizados para velocidade e custo</small>
+            <small>DeepSeek V3 oferece excelente qualidade de texto em português</small>
           </div>
         </div>
       </div>
