@@ -297,7 +297,7 @@ INSTRUÇÕES ESTILO METRÓPOLES POLICIAL:
       if (context) {
         prompt = `DATA: ${dataAtual}
 
-DESCRIÇÃO DO ASSUNTO (informações principais fornecidas pelo jornalista):
+DESCRIÇÃO DO ASSUNTO (informações fornecidas pelo jornalista):
 ${keyword}
 
 ${context}
@@ -307,34 +307,37 @@ Use as notícias da pesquisa para COMPLEMENTAR e ENRIQUECER com informações ad
 
 ${styleInstructions[style] || styleInstructions.globo}
 
-REGRAS DE OURO:
-1. PRIORIZE as informações da descrição fornecida
-2. Use a pesquisa para adicionar contexto e dados complementares
-3. REESCREVA tudo com suas palavras - texto 100% original
-4. NÃO copie frases - apenas use as INFORMAÇÕES
-5. EVITE REPETIR palavras - use SINÔNIMOS variados
-6. CITE APENAS UMA FONTE no texto todo (não repita "segundo X" a cada parágrafo)
-7. Mínimo 8 parágrafos bem desenvolvidos
-8. Humanize o texto - deve parecer escrito por jornalista experiente
+REGRAS:
+1. PRIORIZE as informações da descrição fornecida pelo jornalista
+2. Se o jornalista mencionou NOMES específicos, USE-OS na matéria
+3. Se o jornalista pediu um RANKING ou LISTA, crie com base nas informações fornecidas e pesquisadas
+4. Use a pesquisa para adicionar contexto, dados e fatos complementares
+5. REESCREVA tudo com suas palavras - texto 100% original
+6. EVITE REPETIR palavras - use SINÔNIMOS variados
+7. CITE APENAS UMA FONTE no texto (não repita "segundo X" a cada parágrafo)
+8. Mínimo 8 parágrafos bem desenvolvidos
+9. Se faltar informação específica, indique com [a confirmar] mas NÃO omita o que foi pedido
 
 Retorne em JSON:
 {"title": "título", "subtitle": "subtítulo", "content": "HTML com <p> para parágrafos", "source": "nome da fonte principal citada"}`;
       } else {
         prompt = `DATA: ${dataAtual}
 
-DESCRIÇÃO DO ASSUNTO (informações principais fornecidas pelo jornalista):
+DESCRIÇÃO DO ASSUNTO (informações fornecidas pelo jornalista):
 ${keyword}
 
-TAREFA: Escreva uma matéria jornalística baseada EXCLUSIVAMENTE na descrição acima.
+TAREFA: Escreva uma matéria jornalística baseada na descrição acima.
 
 ${styleInstructions[style] || styleInstructions.globo}
 
-IMPORTANTE: 
-- Use APENAS as informações fornecidas na descrição
-- NÃO invente fatos, nomes ou dados que não foram mencionados
-- Se precisar de dados específicos não fornecidos, use [a confirmar]
-- EVITE REPETIR palavras - use SINÔNIMOS variados
-- Mínimo 6 parágrafos informativos
+REGRAS:
+1. Use as informações fornecidas na descrição como BASE
+2. Se o jornalista mencionou NOMES específicos, USE-OS na matéria
+3. Se o jornalista pediu um RANKING ou LISTA, crie com base nas informações fornecidas
+4. Se precisar de dados específicos não fornecidos, use [a confirmar] ou [dados não disponíveis]
+5. EVITE REPETIR palavras - use SINÔNIMOS variados
+6. Mínimo 6 parágrafos informativos
+7. NÃO omita informações que o jornalista pediu explicitamente
 
 Retorne em JSON:
 {"title": "título", "subtitle": "subtítulo", "content": "HTML com <p> para parágrafos"}`;
