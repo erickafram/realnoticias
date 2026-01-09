@@ -295,52 +295,53 @@ INSTRUÇÕES ESTILO METRÓPOLES POLICIAL:
       let prompt;
       
       if (context) {
-        prompt = `DATA: ${dataAtual}
+        prompt = `DATA ATUAL: ${dataAtual}
 
 DESCRIÇÃO DO ASSUNTO (informações fornecidas pelo jornalista):
 ${keyword}
 
 ${context}
 
-TAREFA: Escreva uma matéria jornalística COMPLETA e ORIGINAL baseada na descrição acima.
-Use as notícias da pesquisa para COMPLEMENTAR e ENRIQUECER com informações adicionais.
+TAREFA: Escreva uma matéria jornalística baseada nas informações acima.
 
 ${styleInstructions[style] || styleInstructions.globo}
 
-REGRAS:
-1. PRIORIZE as informações da descrição fornecida pelo jornalista
-2. Se o jornalista mencionou NOMES específicos, USE-OS na matéria
-3. Se o jornalista pediu um RANKING ou LISTA, crie com base nas informações fornecidas e pesquisadas
-4. Use a pesquisa para adicionar contexto, dados e fatos complementares
-5. REESCREVA tudo com suas palavras - texto 100% original
-6. EVITE REPETIR palavras - use SINÔNIMOS variados
-7. CITE APENAS UMA FONTE no texto (não repita "segundo X" a cada parágrafo)
-8. Mínimo 8 parágrafos bem desenvolvidos
-9. Se faltar informação específica, indique com [a confirmar] mas NÃO omita o que foi pedido
+REGRAS CRÍTICAS - LEIA COM ATENÇÃO:
+1. USE APENAS as informações da DESCRIÇÃO e da PESQUISA acima
+2. Se a pesquisa não trouxe informação sobre algo, NÃO INVENTE - use [informação não confirmada] ou omita
+3. NÃO INVENTE datas, cargos, situações ou fatos que não estão nas fontes acima
+4. Se o jornalista mencionou nomes, use-os MAS só atribua fatos que estão confirmados na pesquisa
+5. EVITE REPETIR palavras - use SINÔNIMOS variados
+6. CITE a fonte quando atribuir informações (ex: "segundo notícia do G1...")
+7. Se não há informação suficiente, escreva uma matéria MENOR mas CORRETA
+8. NUNCA afirme que alguém "deixou o cargo" ou "foi preso" sem essa informação estar na pesquisa
+
+IMPORTANTE: É melhor uma matéria curta e CORRETA do que uma longa com informações INVENTADAS.
 
 Retorne em JSON:
-{"title": "título", "subtitle": "subtítulo", "content": "HTML com <p> para parágrafos", "source": "nome da fonte principal citada"}`;
+{"title": "título", "subtitle": "subtítulo", "content": "HTML com <p> para parágrafos", "source": "fonte principal", "warning": "aviso se faltou informação importante"}`;
       } else {
-        prompt = `DATA: ${dataAtual}
+        prompt = `DATA ATUAL: ${dataAtual}
 
 DESCRIÇÃO DO ASSUNTO (informações fornecidas pelo jornalista):
 ${keyword}
 
-TAREFA: Escreva uma matéria jornalística baseada na descrição acima.
+ATENÇÃO: Não foi possível pesquisar notícias na internet ou a pesquisa não retornou resultados.
+
+TAREFA: Escreva uma matéria jornalística baseada APENAS na descrição fornecida.
 
 ${styleInstructions[style] || styleInstructions.globo}
 
-REGRAS:
-1. Use as informações fornecidas na descrição como BASE
-2. Se o jornalista mencionou NOMES específicos, USE-OS na matéria
-3. Se o jornalista pediu um RANKING ou LISTA, crie com base nas informações fornecidas
-4. Se precisar de dados específicos não fornecidos, use [a confirmar] ou [dados não disponíveis]
+REGRAS CRÍTICAS:
+1. Use APENAS as informações da descrição acima
+2. NÃO INVENTE fatos, datas, cargos ou situações
+3. Se precisar de dados não fornecidos, use [a confirmar] ou [dados não disponíveis]
+4. É melhor uma matéria CURTA e CORRETA do que uma longa com informações INVENTADAS
 5. EVITE REPETIR palavras - use SINÔNIMOS variados
-6. Mínimo 6 parágrafos informativos
-7. NÃO omita informações que o jornalista pediu explicitamente
+6. Indique claramente quando uma informação precisa ser verificada
 
 Retorne em JSON:
-{"title": "título", "subtitle": "subtítulo", "content": "HTML com <p> para parágrafos"}`;
+{"title": "título", "subtitle": "subtítulo", "content": "HTML com <p> para parágrafos", "warning": "ATENÇÃO: Esta matéria precisa de verificação factual antes de publicar"}`;
       }
 
       const response = await this.callTogetherAI(prompt, settings, style);
@@ -360,7 +361,17 @@ Retorne em JSON:
         };
       }
 
-      return res.json({ success: true, data: result });
+      // Adicionar aviso se não encontrou notícias na pesquisa
+      if (searchWeb && !context) {
+        result.warning = 'ATENÇÃO: A pesquisa na internet não retornou resultados. Verifique os fatos antes de publicar.';
+      }
+      
+      // Retornar também o que foi encontrado na pesquisa para o usuário ver
+      return res.json({ 
+        success: true, 
+        data: result,
+        searchResults: context || null
+      });
     } catch (error) {
       console.error('Erro ao gerar artigo:', error);
       return res.status(500).json({ success: false, message: error.message });

@@ -1624,7 +1624,18 @@ showAILoading('Gerando matéria, aguarde...');
           if (editorInstance && data.data.content) {
             editorInstance.setData(data.data.content);
           }
-          alert('Matéria gerada com sucesso! Revise o conteúdo antes de publicar.');
+          
+          // Mostrar aviso se houver
+          let message = 'Matéria gerada! Revise o conteúdo antes de publicar.';
+          if (data.data.warning) {
+            message += '\n\n⚠️ ' + data.data.warning;
+          }
+          if (data.searchResults) {
+            console.log('Resultados da pesquisa usados:', data.searchResults);
+          } else if (searchWeb) {
+            message += '\n\n⚠️ A pesquisa na internet não encontrou notícias sobre este tema. Os dados podem estar desatualizados.';
+          }
+          alert(message);
         } else {
           alert('Erro: ' + (data.message || 'Não foi possível gerar a matéria.'));
         }
