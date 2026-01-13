@@ -105,6 +105,12 @@ router.get('/sitemap.xml', async (req, res) => {
     xml += `    <lastmod>${new Date().toISOString()}</lastmod>\n`;
     xml += `  </sitemap>\n`;
     
+    // Sitemap de todos os posts
+    xml += `  <sitemap>\n`;
+    xml += `    <loc>${siteUrl}/sitemap-posts.xml</loc>\n`;
+    xml += `    <lastmod>${new Date().toISOString()}</lastmod>\n`;
+    xml += `  </sitemap>\n`;
+    
     // Sitemap por categoria
     for (const cat of categories) {
       xml += `  <sitemap>\n`;
@@ -169,6 +175,39 @@ router.get('/sitemap-main.xml', async (req, res) => {
     res.send(sitemap.toString());
   } catch (error) {
     console.error('Erro ao gerar sitemap principal:', error);
+    res.status(500).send('Erro ao gerar sitemap');
+  }
+});
+
+// Sitemap de Todos os Posts
+router.get('/sitemap-posts.xml', async (req, res) => {
+  try {
+    const siteUrl = process.env.SITE_URL || `http://${req.headers.host}`;
+    const smStream = new SitemapStream({ hostname: siteUrl });
+
+    // Todos os posts publicados
+    const posts = await Post.findAll({
+      where: { status: 'published' },
+      order: [['published_at', 'DESC']],
+      limit: 50000 // Limite do sitemap
+    });
+
+    posts.forEach(post => {
+      smStream.write({
+        url: `/noticia/${post.slug}`,
+        changefreq: 'weekly',
+        priority: 0.9,
+        lastmod: post.updated_at
+      });
+    });
+
+    smStream.end();
+
+    const sitemap = await streamToPromise(smStream);
+    res.header('Content-Type', 'application/xml');
+    res.send(sitemap.toString());
+  } catch (error) {
+    console.error('Erro ao gerar sitemap de posts:', error);
     res.status(500).send('Erro ao gerar sitemap');
   }
 });
