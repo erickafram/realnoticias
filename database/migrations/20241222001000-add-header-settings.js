@@ -8,7 +8,7 @@ module.exports = {
       {
         key: 'header_style',
         value: 'default',
-        type: 'select',
+        type: 'text',
         group: 'layout',
         label: 'Estilo do Header',
         description: 'Escolha o layout do cabeçalho do site',
@@ -18,7 +18,7 @@ module.exports = {
       {
         key: 'logo_size',
         value: '40',
-        type: 'select',
+        type: 'number',
         group: 'layout',
         label: 'Tamanho da Logo',
         description: 'Altura máxima da logo em pixels',
