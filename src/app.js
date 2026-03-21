@@ -88,7 +88,7 @@ app.use((req, res, next) => {
     settings: res.locals.settings || {},
     categories: res.locals.categories || [],
     menuPages: res.locals.menuPages || [],
-    siteUrl: process.env.SITE_URL || `http://${req.headers.host}`,
+    siteUrl: res.locals.siteUrl || `http://${req.headers.host}`,
     currentUrl: req.originalUrl,
     currentPath: req.path,
     currentYear: new Date().getFullYear()
@@ -114,7 +114,7 @@ app.use((err, req, res, next) => {
     settings: res.locals.settings || {},
     categories: res.locals.categories || [],
     menuPages: res.locals.menuPages || [],
-    siteUrl: process.env.SITE_URL || `http://${req.headers.host}`,
+    siteUrl: res.locals.siteUrl || `http://${req.headers.host}`,
     currentUrl: req.originalUrl,
     currentPath: req.path,
     currentYear: new Date().getFullYear()

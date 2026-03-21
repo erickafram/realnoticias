@@ -93,7 +93,7 @@ router.post('/api/banner/:id/click', BannerController.registerClick);
 // Sitemap Index (lista todos os sitemaps)
 router.get('/sitemap.xml', async (req, res) => {
   try {
-    const siteUrl = process.env.SITE_URL || `http://${req.headers.host}`;
+    const siteUrl = res.locals.siteUrl;
     const categories = await Category.findAll({ where: { active: true } });
     
     let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
@@ -138,7 +138,7 @@ router.get('/sitemap.xml', async (req, res) => {
 // Sitemap Principal (páginas estáticas e categorias)
 router.get('/sitemap-main.xml', async (req, res) => {
   try {
-    const siteUrl = process.env.SITE_URL || `http://${req.headers.host}`;
+    const siteUrl = res.locals.siteUrl;
     const smStream = new SitemapStream({ hostname: siteUrl });
 
     // Página inicial
@@ -182,7 +182,7 @@ router.get('/sitemap-main.xml', async (req, res) => {
 // Sitemap de Todos os Posts
 router.get('/sitemap-posts.xml', async (req, res) => {
   try {
-    const siteUrl = process.env.SITE_URL || `http://${req.headers.host}`;
+    const siteUrl = res.locals.siteUrl;
     const smStream = new SitemapStream({ hostname: siteUrl });
 
     // Todos os posts publicados
@@ -215,7 +215,7 @@ router.get('/sitemap-posts.xml', async (req, res) => {
 // Sitemap por Categoria (posts de cada categoria)
 router.get('/sitemap-categoria-:slug.xml', async (req, res) => {
   try {
-    const siteUrl = process.env.SITE_URL || `http://${req.headers.host}`;
+    const siteUrl = res.locals.siteUrl;
     const { slug } = req.params;
     
     const category = await Category.findOne({ where: { slug, active: true } });
@@ -258,7 +258,7 @@ router.get('/sitemap-categoria-:slug.xml', async (req, res) => {
 // Sitemap Google News (notícias dos últimos 2 dias)
 router.get('/sitemap-news.xml', async (req, res) => {
   try {
-    const siteUrl = process.env.SITE_URL || `http://${req.headers.host}`;
+    const siteUrl = res.locals.siteUrl;
     const { Setting } = require('../models');
     
     // Buscar nome do site nas configurações
@@ -332,7 +332,7 @@ function escapeXml(str) {
 
 // Robots.txt
 router.get('/robots.txt', (req, res) => {
-  const siteUrl = process.env.SITE_URL || `http://${req.headers.host}`;
+  const siteUrl = res.locals.siteUrl;
   res.type('text/plain');
   res.send(`User-agent: *
 Allow: /

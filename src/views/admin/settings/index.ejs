@@ -62,7 +62,12 @@
             <input type="text" name="site_tagline" value="${groupedSettings.general?.find(s => s.key === 'site_tagline')?.value || ''}" placeholder="Ex: Notícias do Tocantins">
             <small>Aparece ao lado do nome na aba do navegador: "Nome | Slogan"</small>
           </div>
-          ${groupedSettings.general ? groupedSettings.general.filter(s => !['site_logo', 'site_name', 'site_tagline'].includes(s.key)).map(s => 
+          <div class="form-group">
+            <label>URL do Site</label>
+            <input type="url" name="site_url" value="${groupedSettings.general?.find(s => s.key === 'site_url')?.value || ''}" placeholder="https://www.seusite.com.br">
+            <small>URL pública do site. Usada nos botões de compartilhar, meta tags (og:url) e sitemaps. Se vazio, será detectada automaticamente.</small>
+          </div>
+          ${groupedSettings.general ? groupedSettings.general.filter(s => !['site_logo', 'site_name', 'site_tagline', 'site_url'].includes(s.key)).map(s => 
             '<div class="form-group"><label>' + (s.label || s.key) + '</label>' +
             (s.type === 'textarea' ? '<textarea name="' + s.key + '" rows="2">' + (s.value || '') + '</textarea>' : '<input type="text" name="' + s.key + '" value="' + (s.value || '') + '">') +
             '</div>'

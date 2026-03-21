@@ -82,8 +82,10 @@ const addSettingsToLocals = async (req, res, next) => {
     const menuPages = await Page.scope('inMenu').findAll();
     res.locals.menuPages = menuPages;
 
-    // URL base do site
-    res.locals.siteUrl = process.env.SITE_URL || `http://${req.headers.host}`;
+    // URL base do site (prioridade: configuração do banco > variável de ambiente > auto-detectar)
+    const dbSiteUrl = settings.site_url ? settings.site_url.replace(/\/+$/, '') : '';
+    const protocol = req.secure || req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http';
+    res.locals.siteUrl = dbSiteUrl || process.env.SITE_URL || `${protocol}://${req.headers.host}`;
 
     // Ano atual para copyright
     res.locals.currentYear = new Date().getFullYear();
